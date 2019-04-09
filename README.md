@@ -3,7 +3,7 @@
 #### 介绍
 
     go iris curd，参考
-    [https://gitee.com/yhm_my/go-iris](https://gitee.com/yhm_my/go-iris)
+    https://gitee.com/yhm_my/go-iris
 
 #### 软件架构
 
