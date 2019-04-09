@@ -16,7 +16,7 @@ package casbins
 
 import (
 	"errors"
-	"go-iris-curd/main/web/models"
+	modeSys "go-iris-curd/main/web/models/system"
 	"runtime"
 
 	"github.com/casbin/casbin/model"
@@ -126,20 +126,20 @@ func (a *Adapter) close() {
 }
 
 func (a *Adapter) createTable() {
-	err := a.engine.Sync2(new(models.CasbinRule))
+	err := a.engine.Sync2(new(modeSys.CasbinRule))
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (a *Adapter) dropTable() {
-	err := a.engine.DropTables(new(models.CasbinRule))
+	err := a.engine.DropTables(new(modeSys.CasbinRule))
 	if err != nil {
 		panic(err)
 	}
 }
 
-func loadPolicyLine(line models.CasbinRule, model model.Model) {
+func loadPolicyLine(line modeSys.CasbinRule, model model.Model) {
 	lineText := line.PType
 	if line.V0 != "" {
 		lineText += ", " + line.V0
@@ -165,7 +165,7 @@ func loadPolicyLine(line models.CasbinRule, model model.Model) {
 
 // LoadPolicy loads policy from database.
 func (a *Adapter) LoadPolicy(model model.Model) error {
-	var lines []models.CasbinRule
+	var lines []modeSys.CasbinRule
 	err := a.engine.Find(&lines)
 	if err != nil {
 		return err
@@ -178,8 +178,8 @@ func (a *Adapter) LoadPolicy(model model.Model) error {
 	return nil
 }
 
-func savePolicyLine(ptype string, rule []string) models.CasbinRule {
-	line := models.CasbinRule{}
+func savePolicyLine(ptype string, rule []string) modeSys.CasbinRule {
+	line := modeSys.CasbinRule{}
 
 	line.PType = ptype
 	if len(rule) > 0 {
@@ -209,7 +209,7 @@ func (a *Adapter) SavePolicy(model model.Model) error {
 	a.dropTable()
 	a.createTable()
 
-	var lines []models.CasbinRule
+	var lines []modeSys.CasbinRule
 
 	for ptype, ast := range model["p"] {
 		for _, rule := range ast.Policy {
@@ -245,26 +245,26 @@ func (a *Adapter) RemovePolicy(sec string, ptype string, rule []string) error {
 
 // RemoveFilteredPolicy removes policy rules that match the filter from the storage.
 func (a *Adapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex int, fieldValues ...string) error {
-	line := models.CasbinRule{}
+	line := modeSys.CasbinRule{}
 
 	line.PType = ptype
-	if fieldIndex <= 0 && 0 < fieldIndex + len(fieldValues) {
-		line.V0 = fieldValues[0 - fieldIndex]
+	if fieldIndex <= 0 && 0 < fieldIndex+len(fieldValues) {
+		line.V0 = fieldValues[0-fieldIndex]
 	}
-	if fieldIndex <= 1 && 1 < fieldIndex + len(fieldValues) {
-		line.V1 = fieldValues[1 - fieldIndex]
+	if fieldIndex <= 1 && 1 < fieldIndex+len(fieldValues) {
+		line.V1 = fieldValues[1-fieldIndex]
 	}
-	if fieldIndex <= 2 && 2 < fieldIndex + len(fieldValues) {
-		line.V2 = fieldValues[2 - fieldIndex]
+	if fieldIndex <= 2 && 2 < fieldIndex+len(fieldValues) {
+		line.V2 = fieldValues[2-fieldIndex]
 	}
-	if fieldIndex <= 3 && 3 < fieldIndex + len(fieldValues) {
-		line.V3 = fieldValues[3 - fieldIndex]
+	if fieldIndex <= 3 && 3 < fieldIndex+len(fieldValues) {
+		line.V3 = fieldValues[3-fieldIndex]
 	}
-	if fieldIndex <= 4 && 4 < fieldIndex + len(fieldValues) {
-		line.V4 = fieldValues[4 - fieldIndex]
+	if fieldIndex <= 4 && 4 < fieldIndex+len(fieldValues) {
+		line.V4 = fieldValues[4-fieldIndex]
 	}
-	if fieldIndex <= 5 && 5 < fieldIndex + len(fieldValues) {
-		line.V5 = fieldValues[5 - fieldIndex]
+	if fieldIndex <= 5 && 5 < fieldIndex+len(fieldValues) {
+		line.V5 = fieldValues[5-fieldIndex]
 	}
 
 	_, err := a.engine.Delete(line)

@@ -22,14 +22,14 @@ var (
 	e   *casbin.Enforcer
 
 	adtLook sync.Mutex
-	eLook sync.Mutex
+	eLook   sync.Mutex
 
 	rbacModel string
 )
 
 /**
 https://casbin.org/docs/en/rbac-with-domains
- */
+*/
 func SetRbacModel(rootID string) {
 	rbacModel = fmt.Sprintf(`
 [request_definition]

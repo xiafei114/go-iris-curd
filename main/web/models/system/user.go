@@ -1,9 +1,10 @@
-package models
+package system
 
 import (
 	"go-iris-curd/main/web/db"
 	"go-iris-curd/main/web/supports"
 	"time"
+
 	"github.com/go-xorm/xorm"
 )
 

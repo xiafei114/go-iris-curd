@@ -2,14 +2,13 @@ package routes
 
 import (
 	"go-iris-curd/main/middleware/jwts"
-	"go-iris-curd/main/web/models"
+	modeSys "go-iris-curd/main/web/models/system"
 	"go-iris-curd/main/web/supports"
 	"go-iris-curd/main/web/supports/vo"
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/hero"
 )
-
 
 func HomeHub(party iris.Party) {
 	home := party.Party("/")
@@ -21,15 +20,15 @@ func HomeHub(party iris.Party) {
 
 func DynamicMenu(ctx iris.Context) {
 	var (
-		user         *models.User
+		user         *modeSys.User
 		isParseToken bool
-		menuList     []*models.Menu
+		menuList     []*modeSys.Menu
 	)
 
 	if user, isParseToken = jwts.ParseToken(ctx); !isParseToken {
 		return
 	}
 
-	menuList = models.DynamicMenuTree(user.Id)
+	menuList = modeSys.DynamicMenuTree(user.Id)
 	supports.Ok(ctx, supports.OptionSuccess, vo.BuildMenuTree(menuList))
 }

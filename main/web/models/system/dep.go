@@ -1,4 +1,4 @@
-package models
+package system
 
 import (
 	"go-iris-curd/main/web/db"

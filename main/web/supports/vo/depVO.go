@@ -1,6 +1,6 @@
 package vo
 
-import "go-iris-curd/main/web/models"
+import modeSys "go-iris-curd/main/web/models/system"
 
 //部门树结构
 type DepTree struct {
@@ -13,32 +13,32 @@ type DepTree struct {
 
 // 部门表格
 type DepTable struct {
-	*models.Dep
-	SuperName string `json:"superName"`
-	Children []*DepTable `json:"children"`
+	*modeSys.Dep
+	SuperName string      `json:"superName"`
+	Children  []*DepTable `json:"children"`
 }
 
 /**
 构建 dep tree
 由于mysql做树型的复杂度，这儿只支持了两级部门树结构
- */
-func BuildDepTree(depList []*models.Dep) (*DepTree) {
+*/
+func BuildDepTree(depList []*modeSys.Dep) *DepTree {
 	var (
 		root      *DepTree   // 部门树根节点
 		children1 []*DepTree // 一级部门
 
 		// 过滤遍历的每个结果
-		v0 *models.Dep
-		v1 *models.Dep
-		v2 *models.Dep
+		v0 *modeSys.Dep
+		v1 *modeSys.Dep
+		v2 *modeSys.Dep
 	)
 
 	for _, v0 = range depList {
 		if v0.ParentId == 0 {
 			root = &DepTree{ // root根节点
-				Id: v0.Id,
-				Title: v0.DepName,
-				Expand: true,
+				Id:       v0.Id,
+				Title:    v0.DepName,
+				Expand:   true,
 				Disabled: v0.Disabled}
 			break
 		}
@@ -84,8 +84,8 @@ func BuildDepTree(depList []*models.Dep) (*DepTree) {
 
 /**
 构建 dep table
- */
-func BuildDepTable(depList []*models.Dep) (*DepTable) {
+*/
+func BuildDepTable(depList []*modeSys.Dep) *DepTable {
 	var (
 		root      *DepTable   // 部门树根节点
 		children1 []*DepTable // 一级部门
@@ -94,7 +94,7 @@ func BuildDepTable(depList []*models.Dep) (*DepTable) {
 
 	for _, v0 := range depList {
 		if v0.ParentId == 0 {
-			root = &DepTable{// root根节点
+			root = &DepTable{ // root根节点
 				v0,
 				"",
 				nil,
@@ -137,24 +137,24 @@ func BuildDepTable(depList []*models.Dep) (*DepTable) {
 
 /**
 用户管理那边全部节点都可以点击
- */
-func BuildDepTreeForUser(depList []*models.Dep) (*DepTree) {
+*/
+func BuildDepTreeForUser(depList []*modeSys.Dep) *DepTree {
 	var (
 		root      *DepTree   // 部门树根节点
 		children1 []*DepTree // 一级部门
 
 		// 过滤遍历的每个结果
-		v0 *models.Dep
-		v1 *models.Dep
-		v2 *models.Dep
+		v0 *modeSys.Dep
+		v1 *modeSys.Dep
+		v2 *modeSys.Dep
 	)
 
 	for _, v0 = range depList {
 		if v0.ParentId == 0 {
 			root = &DepTree{ // root根节点
-				Id: v0.Id,
-				Title: v0.DepName,
-				Expand: true,
+				Id:       v0.Id,
+				Title:    v0.DepName,
+				Expand:   true,
 				Disabled: false}
 			break
 		}

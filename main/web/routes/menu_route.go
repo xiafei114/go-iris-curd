@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"go-iris-curd/main/web/models"
+	modeSys "go-iris-curd/main/web/models/system"
 	"go-iris-curd/main/web/supports"
 	"go-iris-curd/main/web/supports/vo"
 
@@ -10,10 +10,10 @@ import (
 
 func MenuTable(ctx iris.Context) {
 	var (
-		err error
-		page *supports.Pagination
-		total int64
-		menuList []*models.Menu
+		err      error
+		page     *supports.Pagination
+		total    int64
+		menuList []*modeSys.Menu
 	)
 
 	page, err = supports.NewPagination(ctx)
@@ -21,7 +21,7 @@ func MenuTable(ctx iris.Context) {
 		goto FAIL
 	}
 
-	menuList, total, err = models.GetPaginationMenus(page)
+	menuList, total, err = modeSys.GetPaginationMenus(page)
 	if err != nil {
 		goto ERR
 	}

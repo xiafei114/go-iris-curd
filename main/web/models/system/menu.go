@@ -1,4 +1,4 @@
-package models
+package system
 
 import (
 	"fmt"
@@ -6,12 +6,13 @@ import (
 	"go-iris-curd/main/web/supports"
 	"strconv"
 	"time"
+
 	"github.com/go-xorm/xorm"
 )
 
 /** gov doc
 http://www.xorm.io/docs/
- */
+*/
 
 type (
 	// 菜单表
@@ -132,10 +133,10 @@ FROM role_menu rm WHERE rm.rid in
 
 func GetPaginationMenus(page *supports.Pagination) ([]*Menu, int64, error) {
 	var (
-		err error
-		e = db.MasterEngine()
-		session *xorm.Session
-		total int64
+		err      error
+		e        = db.MasterEngine()
+		session  *xorm.Session
+		total    int64
 		menuList = make([]*Menu, 0)
 	)
 

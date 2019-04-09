@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"go-iris-curd/main/web/models"
+	modeSys "go-iris-curd/main/web/models/system"
 	"go-iris-curd/main/web/supports"
 	"go-iris-curd/main/web/supports/vo"
 	"time"
@@ -12,10 +12,10 @@ import (
 func DepList(ctx iris.Context) {
 	var (
 		err  error
-		deps []*models.Dep
+		deps []*modeSys.Dep
 	)
 
-	if deps, err = models.GetAllDep(); err != nil {
+	if deps, err = modeSys.GetAllDep(); err != nil {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
 		return
 	}
@@ -27,10 +27,10 @@ func DepList(ctx iris.Context) {
 func DepTable(ctx iris.Context) {
 	var (
 		err  error
-		deps []*models.Dep
+		deps []*modeSys.Dep
 	)
 
-	if deps, err = models.GetAllDep(); err != nil {
+	if deps, err = modeSys.GetAllDep(); err != nil {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
 		return
 	}
@@ -42,7 +42,7 @@ func DepTable(ctx iris.Context) {
 func CreateDep(ctx iris.Context) {
 	var (
 		err    error
-		dep   = new(models.Dep)
+		dep    = new(modeSys.Dep)
 		effect int64
 	)
 	if err = ctx.ReadJSON(&dep); err != nil {
@@ -50,7 +50,7 @@ func CreateDep(ctx iris.Context) {
 	}
 
 	dep.CreateTime = time.Now()
-	effect, err = models.CreateDep(dep)
+	effect, err = modeSys.CreateDep(dep)
 	if effect <= 0 || err != nil {
 		goto FAIL
 	}
@@ -69,7 +69,7 @@ func DeleteDep(ctx iris.Context, did int64) {
 		effect int64
 	)
 
-	effect, err = models.DelDepById(did)
+	effect, err = modeSys.DelDepById(did)
 	if effect <= 0 || err != nil {
 		goto FAIL
 	}
@@ -85,7 +85,7 @@ FAIL:
 func RefreshDep(ctx iris.Context) {
 	var (
 		err    error
-		dep = new(models.Dep)
+		dep    = new(modeSys.Dep)
 		effect int64
 	)
 
@@ -94,7 +94,7 @@ func RefreshDep(ctx iris.Context) {
 	}
 
 	dep.UpdateTime = time.Now()
-	effect, err = models.UpdateDepById(dep)
+	effect, err = modeSys.UpdateDepById(dep)
 	if err != nil {
 		goto FAIL
 	}

@@ -1,26 +1,26 @@
 package vo
 
 import (
-	"go-iris-curd/main/web/models"
+	modeSys "go-iris-curd/main/web/models/system"
 )
 
 // 最小菜单树结构
 type MenuVO struct {
-	*models.Menu
-	Children []*models.Menu `json:"children"`
+	*modeSys.Menu
+	Children []*modeSys.Menu `json:"children"`
 }
 
 // 构建 menu tree
-func BuildMenuTree(menuList []*models.Menu) (menuTree []*MenuVO) {
+func BuildMenuTree(menuList []*modeSys.Menu) (menuTree []*MenuVO) {
 	var (
-		menu   *models.Menu
+		menu *modeSys.Menu
 	)
 
 	for _, menu = range menuList {
 		var (
 			menuVO *MenuVO
-			childs = make([]*models.Menu, 0)
-			sub  *models.Menu
+			childs = make([]*modeSys.Menu, 0)
+			sub    *modeSys.Menu
 		)
 
 		for _, sub = range menuList {

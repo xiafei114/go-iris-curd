@@ -4,7 +4,7 @@ import (
 	"go-iris-curd/main/middleware/casbins"
 	"go-iris-curd/main/utils"
 	"go-iris-curd/main/web/db"
-	"go-iris-curd/main/web/models"
+	modeSys "go-iris-curd/main/web/models/system"
 	"strconv"
 	"time"
 
@@ -20,7 +20,7 @@ const (
 func CheckRootExit() bool {
 	e := db.MasterEngine()
 	// root is existed?
-	exit, err := e.Exist(&models.User{Username: username})
+	exit, err := e.Exist(&modeSys.User{Username: username})
 	if err != nil {
 		golog.Fatalf("@@@ When check Root User is exited? happened error. %s", err.Error())
 	}
@@ -28,7 +28,7 @@ func CheckRootExit() bool {
 		golog.Info("@@@ Root User is existed.")
 
 		// 初始化rbac_model
-		r := models.User{Username: username}
+		r := modeSys.User{Username: username}
 		if exit, _ := e.Get(&r); exit {
 			casbins.SetRbacModel(strconv.FormatInt(r.Id, 10))
 			CreateSystemRole()
@@ -37,9 +37,8 @@ func CheckRootExit() bool {
 	return exit
 }
 
-
 func CreateRoot() {
-	newRoot := models.User{
+	newRoot := modeSys.User{
 		Username:   username,
 		Password:   utils.AESEncrypt([]byte(password)),
 		CreateTime: time.Now(),
@@ -69,5 +68,3 @@ func addAllpolicy(rooId string) {
 		e.AddGroupingPolicy(rooId, v[0])
 	}
 }
-
-

@@ -3,7 +3,7 @@ package routes
 import (
 	"go-iris-curd/main/middleware/jwts"
 	"go-iris-curd/main/utils"
-	"go-iris-curd/main/web/models"
+	modeSys "go-iris-curd/main/web/models/system"
 	"go-iris-curd/main/web/supports"
 	"go-iris-curd/main/web/supports/vo"
 	"strconv"
@@ -26,7 +26,7 @@ func UserHub(party iris.Party) {
 func Registe(ctx iris.Context) {
 	var (
 		err    error
-		user   = new(models.User)
+		user   = new(modeSys.User)
 		effect int64
 	)
 
@@ -39,7 +39,7 @@ func Registe(ctx iris.Context) {
 	user.Enable = true
 	user.CreateTime = time.Now()
 
-	effect, err = models.CreateUser(user)
+	effect, err = modeSys.CreateUser(user)
 	if effect <= 0 || err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]注册失败。%s", user.Username, err.Error())
 		goto FAIL
@@ -61,8 +61,8 @@ func LoginOut(ctx iris.Context) {
 func Login(ctx iris.Context) {
 	var (
 		err        error
-		user       = new(models.User)
-		mUser      = new(models.User) // 查询数据后填充了数据的user
+		user       = new(modeSys.User)
+		mUser      = new(modeSys.User) // 查询数据后填充了数据的user
 		ckPassword bool
 		token      string
 	)
@@ -74,7 +74,7 @@ func Login(ctx iris.Context) {
 	}
 
 	mUser.Username = user.Username
-	has, err := models.GetUserByUsername(mUser)
+	has, err := modeSys.GetUserByUsername(mUser)
 	if err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", user.Username, err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.LoginFailur, nil)
@@ -92,7 +92,7 @@ func Login(ctx iris.Context) {
 		return
 	}
 
-	token, err = jwts.GenerateToken(mUser);
+	token, err = jwts.GenerateToken(mUser)
 	golog.Infof("用户[%s], 登录生成token [%s]", mUser.Username, token)
 	if err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]登录，生成token出错。%s", user.Username, err.Error())
@@ -107,10 +107,10 @@ func Login(ctx iris.Context) {
 func UserDepTree(ctx iris.Context) {
 	var (
 		err  error
-		deps []*models.Dep
+		deps []*modeSys.Dep
 	)
 
-	if deps, err = models.GetAllDep(); err != nil {
+	if deps, err = modeSys.GetAllDep(); err != nil {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
 		return
 	}
@@ -125,7 +125,7 @@ func UserTable(ctx iris.Context) {
 		err      error
 		page     *supports.Pagination
 		total    int64
-		userList []*models.User
+		userList []*modeSys.User
 		//depId    int
 	)
 
@@ -135,7 +135,7 @@ func UserTable(ctx iris.Context) {
 		goto FAIL
 	}
 
-	userList, total, err = models.GetPaginationUsers(page)
+	userList, total, err = modeSys.GetPaginationUsers(page)
 	if err != nil {
 		goto ERR
 	}
@@ -155,13 +155,13 @@ ERR:
 }
 
 func UpdateUser(ctx iris.Context) {
-	user := new(models.User)
+	user := new(modeSys.User)
 	if err := ctx.ReadJSON(&user); err != nil {
 		ctx.Application().Logger().Errorf("更新用户[%s]失败。%s", "", err.Error())
 		supports.Error(ctx, iris.StatusBadRequest, supports.OptionFailur, nil)
 		return
 	}
-	effect, err := models.UpdateUserById(user)
+	effect, err := modeSys.UpdateUserById(user)
 	if err != nil {
 		ctx.Application().Logger().Errorf("更新用户[%s]失败。%s", "", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
@@ -193,7 +193,7 @@ func DeleteUsers(ctx iris.Context, uids string) {
 		dUids = append(dUids, uid)
 	}
 
-	effect, err := models.DeleteByUsers(dUids)
+	effect, err := modeSys.DeleteByUsers(dUids)
 	if err != nil {
 		ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteUsersFailur, nil)

@@ -11,7 +11,7 @@ func Test_p(t *testing.T) {
 
 func Test_r(t *testing.T) {
 	master := MasterEngine()
-	//u := models.User{
+	//u := modeSys.User{
 	//	Username:   "yhm7",
 	//	Password:   "12345",
 	//	CreateTime: time.Now(),
@@ -25,7 +25,7 @@ func Test_r(t *testing.T) {
 	//t.Log(master.NewRecord(u))
 	//master.Create(&u)
 	//t.Log(master.NewRecord(u))
-	////root := models.User{
+	////root := modeSys.User{
 	////	Username: "root22",
 	////	Password: "root2",
 	////	CreateTime: time.Now(),
@@ -34,7 +34,7 @@ func Test_r(t *testing.T) {
 	////master.Create(root)
 	////master.Commit()
 	//
-	//u2 := []models.User{}
+	//u2 := []modeSys.User{}
 	//// 自定义sql查询
 	//master.Raw("select * from user").Scan(&u2)
 	//t.Log(u2)

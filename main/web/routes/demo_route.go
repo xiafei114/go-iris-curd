@@ -15,7 +15,7 @@ func DemoHub(party iris.Party) {
 }
 
 func AddOneProduct(ctx iris.Context) {
-	//demo := new(models.Demo)
+	//demo := new(modeSys.Demo)
 	//if err := ctx.ReadJSON(demo); err != nil {
 	//	supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, err.Error())
 	//	return
@@ -32,7 +32,7 @@ func AddOneProduct(ctx iris.Context) {
 }
 
 func GetOneProduct(ctx iris.Context, pid int64) {
-	//demo := new(models.Demo)
+	//demo := new(modeSys.Demo)
 	//demo.Pid = pid
 	//_, err := ds.GetOneProduct(demo)
 	//if err != nil {

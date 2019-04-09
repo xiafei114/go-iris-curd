@@ -2,7 +2,7 @@ package routes
 
 import (
 	"go-iris-curd/main/middleware/casbins"
-	"go-iris-curd/main/web/models"
+	modeSys "go-iris-curd/main/web/models/system"
 	"go-iris-curd/main/web/supports"
 	"go-iris-curd/main/web/supports/vo"
 	"log"
@@ -21,7 +21,7 @@ func RoleTable(ctx iris.Context) {
 		return
 	}
 
-	rules, total, err := models.GetPaginationRoles(page)
+	rules, total, err := modeSys.GetPaginationRoles(page)
 	if err != nil {
 		ctx.Application().Logger().Errorf("查询角色列表错误. %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
@@ -37,7 +37,7 @@ func RoleTable(ctx iris.Context) {
 // 创建角色
 func CreateRole(ctx iris.Context) {
 	//rule := new(supports.RoleDefine)
-	rule := new(models.CasbinRule)
+	rule := new(modeSys.CasbinRule)
 	if err := ctx.ReadJSON(&rule); err != nil {
 		supports.Error(ctx, http.StatusInternalServerError, supports.ParseParamsFailur, nil)
 	}
@@ -51,14 +51,14 @@ func CreateRole(ctx iris.Context) {
 }
 
 func UpdateRole(ctx iris.Context) {
-	role := new(models.CasbinRule)
+	role := new(modeSys.CasbinRule)
 	if err := ctx.ReadJSON(&role); err != nil {
 		ctx.Application().Logger().Errorf("更新角色[%s]失败。%s", "", err.Error())
 		supports.Error(ctx, iris.StatusBadRequest, supports.OptionFailur, nil)
 		return
 	}
 
-	effect, err := models.UpdateRoleById(role)
+	effect, err := modeSys.UpdateRoleById(role)
 	if err != nil {
 		ctx.Application().Logger().Errorf("更新角色[%s]失败。%s", "", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
@@ -109,7 +109,7 @@ func DeleteRole(ctx iris.Context, rids string) {
 		dRids = append(dRids, uid)
 	}
 
-	effect, err := models.DeleteByRoles(dRids)
+	effect, err := modeSys.DeleteByRoles(dRids)
 	if err != nil {
 		ctx.Application().Logger().Error("删除角色错误, %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteRolesFailur, nil)
@@ -165,7 +165,7 @@ func RoleUserTable(ctx iris.Context, rKey string) {
 		uids = append(uids, id)
 	}
 
-	userList, total, err := models.GetUsersByUids(uids, page)
+	userList, total, err := modeSys.GetUsersByUids(uids, page)
 	if err != nil {
 		ctx.Application().Logger().Error("获取角色关联的用户表错误, %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
@@ -186,7 +186,7 @@ func RoleMenuTable(ctx iris.Context, rid int64) {
 		return
 	}
 
-	menus, total, err := models.GetMenusByRoleid(rid, page)
+	menus, total, err := modeSys.GetMenusByRoleid(rid, page)
 	if err != nil {
 		ctx.Application().Logger().Errorf("获取角色关联的菜单表错误, %s, %v", err.Error(), menus)
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())

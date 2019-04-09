@@ -2,7 +2,7 @@ package jwts
 
 import (
 	"fmt"
-	"go-iris-curd/main/web/models"
+	modeSys "go-iris-curd/main/web/models/system"
 	"go-iris-curd/main/web/supports"
 	"log"
 	"strings"
@@ -71,7 +71,7 @@ func Serve(ctx context.Context) bool {
 }
 
 // 解析token的信息为当前用户
-func ParseToken(ctx context.Context) (*models.User, bool) {
+func ParseToken(ctx context.Context) (*modeSys.User, bool) {
 	mapClaims := (jwts.Get(ctx).Claims).(jwt.MapClaims)
 
 	id, ok1 := mapClaims["id"].(float64)
@@ -83,7 +83,7 @@ func ParseToken(ctx context.Context) (*models.User, bool) {
 		return nil, false
 	}
 
-	user := models.User{
+	user := modeSys.User{
 		Id:       int64(id),
 		Username: username,
 	}
@@ -273,12 +273,12 @@ type Claims struct {
 	Username string `json:"username"`
 	Enable   bool   `json:"enable"`
 	//Password string `json:"password"`
-	//User models.User `json:"user"`
+	//User modeSys.User `json:"user"`
 	jwt.StandardClaims
 }
 
 // 在登录成功的时候生成token
-func GenerateToken(user *models.User) (string, error) {
+func GenerateToken(user *modeSys.User) (string, error) {
 	//expireTime := time.Now().Add(60 * time.Second)
 	expireTime := time.Now().Add(time.Duration(parse.O.JWTTimeout) * time.Second)
 
