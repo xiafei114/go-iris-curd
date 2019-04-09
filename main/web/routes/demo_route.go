@@ -3,6 +3,10 @@ package routes
 import (
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/hero"
+
+	"go-iris-curd/main/web/supports"
+
+	modeDemo "go-iris-curd/main/web/models/demo"
 )
 
 func DemoHub(party iris.Party) {
@@ -15,29 +19,29 @@ func DemoHub(party iris.Party) {
 }
 
 func AddOneProduct(ctx iris.Context) {
-	//demo := new(modeSys.Demo)
-	//if err := ctx.ReadJSON(demo); err != nil {
-	//	supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, err.Error())
-	//	return
-	//}
-	//
-	//golog.Info(demo)
-	//demo.CreateDate = time.Now()
-	//err := ds.AddOneProduct(demo)
-	//if err != nil {
-	//	supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, err.Error())
-	//	return
-	//}
-	//supports.Ok_(ctx, supports.Option_success)
+	// product := new(modeDemo.Product)
+	// if err := ctx.ReadJSON(product); err != nil {
+	// 	supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+	// 	return
+	// }
+
+	// golog.Info(product)
+	// product.CreatedAt = time.Now()
+	// err := ds.AddOneProduct(product)
+	// if err != nil {
+	// 	supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+	// 	return
+	// }
+	// supports.Ok_(ctx, supports.OptionSuccess)
 }
 
-func GetOneProduct(ctx iris.Context, pid int64) {
-	//demo := new(modeSys.Demo)
-	//demo.Pid = pid
-	//_, err := ds.GetOneProduct(demo)
-	//if err != nil {
-	//	supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, nil)
-	//	return
-	//}
-	//supports.Ok(ctx, supports.Option_success, demo)
+func GetOneProduct(ctx iris.Context, pid uint) {
+	product := new(modeDemo.Product)
+	product.ID = pid
+	_, err := modeDemo.GetOneProduct(product)
+	if err != nil {
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+		return
+	}
+	supports.Ok(ctx, supports.OptionSuccess, product)
 }

@@ -1,13 +1,12 @@
 package db
 
 import (
-	"go-iris-curd/main/inits/parse"
 	"testing"
 )
 
-func Test_p(t *testing.T) {
-	parse.ParseDBSetting()
-}
+// func Test_p(t *testing.T) {
+// 	parse.ParseDBSetting()
+// }
 
 func Test_r(t *testing.T) {
 	master := MasterEngine()
@@ -17,7 +16,6 @@ func Test_r(t *testing.T) {
 	//	CreateTime: time.Now(),
 	//	UpdateTime: time.Now(),
 	//}
-
 
 	master.Ping()
 

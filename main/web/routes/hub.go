@@ -30,11 +30,11 @@ func corsSetting(app *iris.Application) (main iris.Party) {
 	)
 
 	crs = cors.New(cors.Options{
-		AllowedOrigins: []string{"*"}, //允许通过的主机名称
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders: []string{"*"},
-		Debug:          true,
-		//AllowCredentials: true,
+		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		Debug:            true,
+		AllowCredentials: true,
 	})
 
 	/* 定义路由 */
