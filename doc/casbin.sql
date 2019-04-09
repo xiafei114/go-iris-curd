@@ -53,26 +53,29 @@ INSERT INTO `casbin_rule` VALUES ('73', 'p', 'components', 'a', '/components*', 
 INSERT INTO `casbin_rule` VALUES ('74', 'g', '90', 'components', 'a', '', '', '', null);
 
 -- ----------------------------
--- Table structure for demo
+-- Table structure for product
 -- ----------------------------
-DROP TABLE IF EXISTS `demo`;
-CREATE TABLE `demo` (
-  `pid` int(10) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `product_code` varchar(255) DEFAULT '',
   `product_name` varchar(255) DEFAULT '',
+  `price` int(11) DEFAULT NULL,
   `number` int(11) DEFAULT NULL,
-  `create_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`pid`)
+  `created_At` datetime DEFAULT NULL,
+  `updated_At` datetime DEFAULT NULL,
+  `deleted_At` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of demo
+-- Records of product
 -- ----------------------------
-INSERT INTO `demo` VALUES ('1', 'PD-001', 'asc', '2', '2019-01-08 10:30:33');
-INSERT INTO `demo` VALUES ('2', 'PD-002', 'asc', '2', '2019-01-08 10:38:21');
-INSERT INTO `demo` VALUES ('3', 'PD-003', 'asc', '2', '2019-01-08 10:38:51');
-INSERT INTO `demo` VALUES ('4', 'PD-005', 'asc', '2', '2019-01-08 10:39:33');
-INSERT INTO `demo` VALUES ('5', 'PD-006', 'asc', '2', '2019-01-08 10:44:21');
+INSERT INTO `product` VALUES ('1', 'PD-001', 'asc1', '2','2', '2019-01-08 10:30:33', '2019-01-08 10:30:33',null);
+INSERT INTO `product` VALUES ('2', 'PD-002', 'asc2', '2','2', '2019-01-08 10:38:21', '2019-01-08 10:30:33',null);
+INSERT INTO `product` VALUES ('3', 'PD-003', 'asc3', '2','2', '2019-01-08 10:38:51', '2019-01-08 10:30:33',null);
+INSERT INTO `product` VALUES ('4', 'PD-005', 'asc4', '2','2', '2019-01-08 10:39:33', '2019-01-08 10:30:33',null);
+INSERT INTO `product` VALUES ('5', 'PD-006', 'asc5', '2','2', '2019-01-08 10:44:21', '2019-01-08 10:30:33',null);
 
 -- ----------------------------
 -- Table structure for dep

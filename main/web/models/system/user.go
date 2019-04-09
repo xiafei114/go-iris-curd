@@ -21,6 +21,7 @@ type User struct {
 	Userface   string    `xorm:"notnull" json:"userface" form:"userface"`
 	CreateTime time.Time `json:"createTime" form:"createTime"`
 	UpdateTime time.Time `json:"updateTime" form:"updateTime"`
+	
 }
 
 func CreateUser(user ...*User) (int64, error) {
