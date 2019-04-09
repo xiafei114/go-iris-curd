@@ -168,7 +168,9 @@ export default {
 
       page: {
         start: 1,
-        size: 10
+        size: 10,
+        searchKey :'',
+        searchValue:''
       }
     }
   },
@@ -232,8 +234,11 @@ export default {
     handleClear (e) {
       if (e.target.value === '') this.insideTableData = this.value
     },
-    handleSearch () {
-      this.insideTableData = this.value.filter(item => item[this.searchKey].indexOf(this.searchValue) > -1)
+    handleSearch () { //查询
+      this.page.searchKey = this.searchKey;
+      this.page.searchValue = this.searchValue;
+      this.$emit('handle-Search', this.page)
+      // this.insideTableData = this.value.filter(item => item[this.searchKey].indexOf(this.searchValue) > -1)
       // this.insideTableData = this.value.filter(item =>
       // {
       //   console.log(item[this.searchKey].indexOf(this.searchValue))
@@ -296,6 +301,7 @@ export default {
     changeSize (size) {
       this.page.size = size
       console.log(this.total)
+      this.$emit('change-size', this.page)
     }
   },
   watch: {
@@ -305,7 +311,7 @@ export default {
     },
     value (val) {
       this.handleTableData()
-      if (this.searchable) this.handleSearch()
+      // if (this.searchable) this.handleSearch()
     }
   },
   mounted () {

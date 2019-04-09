@@ -6,7 +6,7 @@
           <FormItem prop="name" label="部门名称：">
             <Input type="text" v-model="userValidate.name" placeholder="Enter name" clearable style="width: auto" />
           </FormItem>
-          <FormItem prop="username" label="稷下之学：">
+          <FormItem prop="username" label="姓名：">
             <Input type="text" v-model="userValidate.username" prefix="ios-contact" placeholder="Enter text" clearable style="width: auto" />
           </FormItem>
           <FormItem prop="phone" label="手机号码：">

@@ -48,6 +48,8 @@ export default {
   role_mgr: '角色管理',
   menu_mgr: '菜单管理',
   dep_mgr: '部门管理',
+  demo_mgr: 'demo管理',
+  product_mgr: '产品管理',
   add_user_page: '添加用户',
   add_dep_page: '添加部门'
 

@@ -2,26 +2,13 @@
 
   <div>
     <Row :gutter="16">
-      <Col span="5">
-      <Collapse v-model="org">
-        <Panel :hide-arrow="true" name='1'>
-          组织机构
-          <Button @click="pullDepTree" :loading="refreshDepTreeLoading" slot="content" icon="ios-refresh" type="dashed"
-                  size="small" long>刷新部门
-          </Button>
-          <Tree slot="content" :data="depTree" @on-select-change="selectDep"></Tree>
-        </Panel>
-      </Collapse>
-      </Col>
-
-      <Col span="19">
       <Card>
         <Button class="tool" type="primary" icon="md-person-add" @click="addUser">新增</Button>
         <Button class="tool" type="warning" icon="md-create" @click="modifyUser" :disabled="modifyUserDisable">修改
         </Button>
         <Button class="tool" type="error" icon="md-close" @click="deleteUsers" :disabled="deleteUsersDisable">删除
         </Button>
-        <Button class="tool" type="dashed" icon="ios-refresh" :loading="refreshUserLoading" @click="pullUserTable">刷新
+        <Button class="tool" type="dashed" icon="ios-refresh" :loading="refreshUserLoading" @click="pullTableList">刷新
         </Button>
         <tables ref="tables"
                 searchable
@@ -30,14 +17,13 @@
                 :columns="columns"
                 :total="total"
                 :highlightRow=true
-                @change-page="pullUserTable"
-                @change-size="pullUserTable"
-                @handle-Search="pullUserTable"
+                @change-page="pullTableList"
+                @change-size="pullTableList"
+                @handle-Search="pullTableList"
                 @on-delete="handleDelete"
                 @on-selection-change="selectChange"
         />
       </Card>
-      </Col>
     </Row>
   </div>
 
@@ -55,10 +41,6 @@
     },
     data() {
       return {
-        org: '1',
-        depTree: [],
-        selectDepId: -1,
-        refreshDepTreeLoading: false,
 
         modifyUserDisable: true,
         deleteUsersDisable: true,
@@ -111,12 +93,6 @@
       handleDelete(params) {
         console.log(params)
       },
-      selectDep(dep) {
-        if (dep instanceof Array && dep.length === 1) {
-          let {id} = dep[0]
-          console.log(id)
-        }
-      },
       addUser() {
         this.$router.push({
           name: 'add_user_page'
@@ -148,24 +124,14 @@
           : this.deleteUsersDisable = true
       },
 
-      // 拉取部门树
-      pullDepTree() {
-        this.depTree = []
-        this.refreshDepTreeLoading = true
-        Get('/admin/users/dep').then(resp => {
-          this.depTree.push(resp.data.data)
-        })
-        setTimeout(() => {
-          this.refreshDepTreeLoading = false
-        }, 1 * 1000)
-      },
-      pullUserTable({start, size,searchKey,searchValue}) {
+      //获得内容
+      pullTableList({start, size,searchKey,searchValue}) {
         this.tableData = []
         this.refreshUserLoading = true
 
         if (start === undefined) start = 1
         if (size === undefined) size = 10
-        let url = '/admin/users?start=' + start + '&size=' + size + '&depId=' + this.selectDepId + '&searchKey=' + searchKey + '&searchValue=' + searchValue
+        let url = '/admin/users?start=' + start + '&size=' + size + '&searchKey=' + searchKey + '&searchValue=' + searchValue
         console.log('url=', url)
         // return
         Get(url).then(resp => {
@@ -177,9 +143,12 @@
           this.refreshUserLoading = false
         }, 1.5 * 1000)
       },
+      handleClear(searchKey,searchValue){
+        console.log(searchKey);
+        console.log(searchValue);
+      },
       pullData() {
-        this.pullDepTree()
-        this.pullUserTable({})
+        this.pullTableList({})
       }
     },
     computed: {},
