@@ -1,0 +1,9 @@
+{
+  "presets": [
+    "@vue/app"
+  ]
+//  "plugins": [["import", {
+//    "libraryName": "iView",
+//    "libraryDirectory": "src/components"
+//  }]]
+}
