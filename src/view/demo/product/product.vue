@@ -131,7 +131,11 @@
 
         if (start === undefined) start = 1
         if (size === undefined) size = 10
-        let url = '/admin/users?start=' + start + '&size=' + size + '&searchKey=' + searchKey + '&searchValue=' + searchValue
+        let url = '/admin/users?start=' + start + '&size=' + size + '&depId=' + this.selectDepId
+
+        if(! (searchValue === undefined)){
+          url +=  '&searchKey=' + searchKey + '&searchValue=' + searchValue
+        }
         console.log('url=', url)
         // return
         Get(url).then(resp => {

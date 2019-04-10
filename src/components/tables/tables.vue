@@ -41,7 +41,7 @@
     <div style="margin: 10px;overflow: hidden">
       <Button v-if="showExport" type="primary" @click="exportExcel">导出为Csv文件</Button>
       <div v-if="showPage" style="float: right;">
-        <Page :total="total" :current="1" size="small" @on-change="changePage" @on-page-size-change="changeSize" show-elevator show-sizer show-total></Page>
+        <Page ref="pages" :total="total" :current="1" @on-change="changePage" @on-page-size-change="changeSize" show-elevator show-sizer show-total></Page>
       </div>
     </div>
 
@@ -238,6 +238,7 @@ export default {
       this.page.searchKey = this.searchKey;
       this.page.searchValue = this.searchValue;
       this.$emit('handle-Search', this.page)
+
       // this.insideTableData = this.value.filter(item => item[this.searchKey].indexOf(this.searchValue) > -1)
       // this.insideTableData = this.value.filter(item =>
       // {
