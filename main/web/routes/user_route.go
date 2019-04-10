@@ -122,10 +122,11 @@ func UserDepTree(ctx iris.Context) {
 // 用户报表
 func UserTable(ctx iris.Context) {
 	var (
-		err      error
-		page     *supports.Pagination
-		total    int64
-		userList []*modeSys.User
+		err   error
+		page  *supports.Pagination
+		total int64
+		// userList []*modeSys.User
+		userList = make([]*modeSys.User, 0)
 		//depId    int
 	)
 
@@ -135,7 +136,7 @@ func UserTable(ctx iris.Context) {
 		goto FAIL
 	}
 
-	userList, total, err = modeSys.GetPaginationUsers(page)
+	total, err = supports.GetPagination(&userList, page)
 	if err != nil {
 		goto ERR
 	}

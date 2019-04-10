@@ -5,8 +5,6 @@ import (
 	"go-iris-curd/main/web/models"
 
 	"go-iris-curd/main/web/supports"
-
-	"github.com/go-xorm/xorm"
 )
 
 type Product struct {
@@ -59,16 +57,12 @@ func DeleteByProducts(uids []int64) (effect int64, err error) {
 
 func GetPaginationProducts(page *supports.Pagination) ([]*Product, int64, error) {
 	var (
-		e           = db.MasterEngine()
-		session     *xorm.Session
-		err         error
-		count       int64
-		ProductList = make([]*Product, 0)
+		err        error
+		count      int64
+		entityList = make([]*Product, 0)
 	)
 
-	session = e.Limit(page.Limit, page.Start)
-	err = session.Find(&ProductList)
-	count, err = session.Count(&Product{})
+	count, err = supports.GetPagination(&entityList, page)
 
-	return ProductList, count, err
+	return entityList, count, err
 }

@@ -60,22 +60,11 @@ func DeleteByUsers(uids []int64) (effect int64, err error) {
 // 分页查询user
 func GetPaginationUsers(page *supports.Pagination) ([]*User, int64, error) {
 	var (
-		// e        = db.MasterEngine()
-		// session  *xorm.Session
 		err      error
 		count    int64
 		userList = make([]*User, 0)
 	)
 
-	// // 需要where查询
-	// if len(page.SearchValue) > 0 {
-	// 	session = e.Where(fmt.Sprintf("%s like ?", page.SearchKey), "%"+page.SearchValue+"%")
-	// 	session = session.Limit(page.Limit, page.Start)
-	// } else {
-	// 	session = e.Limit(page.Limit, page.Start)
-	// }
-
-	// count, err = session.FindAndCount(&userList)
 	count, err = supports.GetPagination(&userList, page)
 
 	return userList, count, err
