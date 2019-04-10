@@ -4,8 +4,6 @@ import (
 	"go-iris-curd/main/web/db"
 	"go-iris-curd/main/web/supports"
 	"time"
-
-	"github.com/go-xorm/xorm"
 )
 
 // mysql user table
@@ -21,7 +19,6 @@ type User struct {
 	Userface   string    `xorm:"notnull" json:"userface" form:"userface"`
 	CreateTime time.Time `json:"createTime" form:"createTime"`
 	UpdateTime time.Time `json:"updateTime" form:"updateTime"`
-	
 }
 
 func CreateUser(user ...*User) (int64, error) {
@@ -60,18 +57,26 @@ func DeleteByUsers(uids []int64) (effect int64, err error) {
 	return
 }
 
+// 分页查询user
 func GetPaginationUsers(page *supports.Pagination) ([]*User, int64, error) {
 	var (
-		e        = db.MasterEngine()
-		session  *xorm.Session
+		// e        = db.MasterEngine()
+		// session  *xorm.Session
 		err      error
 		count    int64
 		userList = make([]*User, 0)
 	)
 
-	session = e.Limit(page.Limit, page.Start)
-	err = session.Find(&userList)
-	count, err = session.Count(&User{})
+	// // 需要where查询
+	// if len(page.SearchValue) > 0 {
+	// 	session = e.Where(fmt.Sprintf("%s like ?", page.SearchKey), "%"+page.SearchValue+"%")
+	// 	session = session.Limit(page.Limit, page.Start)
+	// } else {
+	// 	session = e.Limit(page.Limit, page.Start)
+	// }
+
+	// count, err = session.FindAndCount(&userList)
+	count, err = supports.GetPagination(&userList, page)
 
 	return userList, count, err
 }
