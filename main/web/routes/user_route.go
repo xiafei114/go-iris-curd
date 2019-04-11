@@ -45,7 +45,7 @@ func Registe(ctx iris.Context) {
 		goto FAIL
 	}
 
-	supports.Ok_(ctx, supports.RegisteSuccess)
+	supports.OkR(ctx, supports.RegisteSuccess)
 	return
 
 FAIL:

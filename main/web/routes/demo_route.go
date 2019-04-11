@@ -42,7 +42,7 @@ func AddOneProduct(ctx iris.Context) {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
 		return
 	}
-	supports.Ok_(ctx, supports.OptionSuccess)
+	supports.OkR(ctx, supports.OptionSuccess)
 }
 
 func GetOneProduct(ctx iris.Context, pid int64) {

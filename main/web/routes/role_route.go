@@ -47,7 +47,7 @@ func CreateRole(ctx iris.Context) {
 	if !ok {
 		supports.Error(ctx, http.StatusInternalServerError, supports.RoleCreateFailur, nil)
 	}
-	supports.Ok_(ctx, supports.RoleCreateSuccess)
+	supports.OkR(ctx, supports.RoleCreateSuccess)
 }
 
 func UpdateRole(ctx iris.Context) {
@@ -132,7 +132,7 @@ func RelationUserRole(ctx iris.Context) {
 	e := casbins.GetEnforcer()
 	for _, v := range groupDef.Sub {
 		// 给目标用户添加角色
-		if !e.AddGroupingPolicy(strconv.FormatInt(groupDef.Uid, 10), v) {
+		if !e.AddGroupingPolicy(strconv.FormatInt(groupDef.UID, 10), v) {
 			ok = false
 		}
 	}
@@ -141,7 +141,7 @@ func RelationUserRole(ctx iris.Context) {
 		supports.Error(ctx, http.StatusInternalServerError, supports.OptionFailur, nil)
 		return
 	}
-	supports.Ok_(ctx, supports.OptionSuccess)
+	supports.OkR(ctx, supports.OptionSuccess)
 }
 
 func RoleUserTable(ctx iris.Context, rKey string) {

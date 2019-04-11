@@ -55,7 +55,7 @@ func CreateDep(ctx iris.Context) {
 		goto FAIL
 	}
 
-	supports.Ok_(ctx, supports.OptionSuccess)
+	supports.OkR(ctx, supports.OptionSuccess)
 	return
 
 FAIL:
@@ -74,7 +74,7 @@ func DeleteDep(ctx iris.Context, did int64) {
 		goto FAIL
 	}
 
-	supports.Ok_(ctx, supports.OptionSuccess)
+	supports.OkR(ctx, supports.OptionSuccess)
 	return
 
 FAIL:
