@@ -8,7 +8,7 @@
       <Button @click="handleSearch" class="search-btn" type="primary" icon="ios-search">搜索</Button>
     </div>
     <Table
-      ref="tablesMain"
+      :ref="tableRef"
       :data="insideTableData"
       :columns="insideColumns"
       :stripe="stripe"
@@ -63,6 +63,12 @@ import './index.less'
 export default {
   name: 'Tables',
   props: {
+    tableRef:{
+      type: String,
+      default () {
+        return 'tableMain'
+      }
+    },
     showPage: {
       type: Boolean,
       default: true

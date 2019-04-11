@@ -3,17 +3,18 @@
   <div>
     <Row :gutter="16">
       <Card>
-        <Button class="tool" type="primary" icon="md-person-add" @click="addUser">新增</Button>
-        <Button class="tool" type="warning" icon="md-create" @click="modifyUser" :disabled="modifyUserDisable">修改
+        <Button class="tool" type="primary" icon="md-add" @click="addEntity">新增</Button>
+        <Button class="tool" type="warning" icon="md-create" @click="modifyEntity" :disabled="modifyEntityDisable">修改
         </Button>
-        <Button class="tool" type="error" icon="md-close" @click="deleteUsers" :disabled="deleteUsersDisable">删除
+        <Button class="tool" type="error" icon="md-close" @click="deleteEntitys" :disabled="deleteEntitysDisable">删除
         </Button>
-        <Button class="tool" type="dashed" icon="ios-refresh" :loading="refreshUserLoading" @click="pullTableList">刷新
+        <Button class="tool" type="dashed" icon="ios-refresh" :loading="refreshEntityLoading" @click="pullTableList">刷新
         </Button>
         <tables ref="tables"
                 searchable
                 search-place="top"
                 v-model="tableData"
+                tableRef="selection"
                 :columns="columns"
                 :total="total"
                 :highlightRow=true
@@ -41,20 +42,17 @@
     },
     data() {
       return {
+        modifyEntityDisable: true,
+        deleteEntitysDisable: true,
+        refreshEntityLoading: false,
 
-        modifyUserDisable: true,
-        deleteUsersDisable: true,
-
-        refreshUserLoading: false,
         total: 0,
         columns: [
           {title: '', key: 'handle', type: 'selection', width: 50, align: 'center'},
-          {title: '编号', key: 'productCode', sortable: true},
-          {title: '品名', key: 'productName', sortable: true},
+          {title: '编号', key: 'product_Code', sortable: true},
+          {title: '品名', key: 'product_Name', sortable: true},
           {title: '金额', key: 'price', sortable: true},
           {title: '数量', key: 'number', sortable: true},
-          {title: '创建时间', key: 'handle'},
-          {title: '更新时间', key: 'handle'},
           {
             title: '操作',
             key: 'handle',
@@ -70,7 +68,6 @@
                   on: {
                     'on-ok': () => {
                       vm.$emit('on-delete', params)
-                      vm.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
                     }
                   }
                 })
@@ -78,61 +75,86 @@
             ]
           }
         ],
-        tableData: []
+        tableData: [],  // 数据
+        selection:[],
+        page: {
+          start: 1,
+          size: 10,
+          searchKey :'',
+          searchValue:''
+        }
       }
     },
     methods: {
       handleDelete(params) {  //删除
         console.log(params.row)
-
         let url = '/product/' + params.row.id
         Delete(url).then(resp => {
           this.total = this.total -1;
+          this.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
         })
       },
-      addUser() { //添加产品
+      addEntity() { //添加产品
         this.$router.push({
-          name: 'add_user_page'
+          name: 'add_Entity_page'
         })
       },
-      modifyUser() {
-        console.log('modifyUser ...')
+      modifyEntity() {
+        console.log('modifyEntity ...')
       },
-      deleteUsers() {
+      deleteEntitys() {
+        let vm = this;
+        function callBackOk(){
+          console.log(vm.selection);
+          console.log(vm.$refs.tables.$refs.selection);
+
+          let ids = "";
+          vm.selection.forEach(item =>{
+            ids += item.id+",";
+          });
+
+          let url = '/product/' + ids
+          Delete(url).then(resp => {
+            vm.pullTableList(vm.page)
+          })
+        }
         this.$Modal.confirm({
-          title: '确认删除选中的用户?',
-          // content: '<p>Content of dialog</p><p>Content of dialog</p>',
+          title: '确认删除选中的产品?',
+          // content: '<p>Content o用f dialog</p><p>Content of dialog</p>',
           closable: true,
           onOk() {
-            alert('删除了用户')
+            callBackOk();
           },
           onCancel() {
           }
         })
       },
 
+
       // 监听选择的表格
       selectChange(selection) {
-        (selection instanceof Array && selection.length === 1)
-          ? this.modifyUserDisable = false
-          : this.modifyUserDisable = true;
-        (selection instanceof Array && selection.length > 0)
-          ? this.deleteUsersDisable = false
-          : this.deleteUsersDisable = true
+        if(selection instanceof Array){
+          selection.length === 1 ? this.modifyEntityDisable = false : this.modifyEntityDisable = true;
+          selection.length > 0 ? this.deleteEntitysDisable = false : this.deleteEntitysDisable = true;
+          this.selection = selection;
+        }
       },
 
       //获得内容
-      pullTableList({start, size,searchKey,searchValue}) {
+      pullTableList(page) {
         this.tableData = []
-        this.refreshUserLoading = true
+        this.refreshEntityLoading = true
 
-        if (start === undefined) start = 1
-        if (size === undefined) size = 10
-        let url = '/product?start=' + start + '&size=' + size
+        if (page.start === undefined) page.start = 1
+        if (page.size === undefined) page.size = 10
+        let url = '/product?start=' + page.start + '&size=' + page.size
 
-        if(! (searchValue === undefined)){
-          url +=  '&searchKey=' + searchKey + '&searchValue=' + searchValue
+        if(! (page.searchValue === undefined)){
+          url +=  '&searchKey=' + page.searchKey + '&searchValue=' + page.searchValue
         }
+
+        this.page = page;
+
         console.log('url=', url)
         // return
         Get(url).then(resp => {
@@ -141,7 +163,7 @@
           this.tableData = resp.data.rows
         })
         setTimeout(() => {
-          this.refreshUserLoading = false
+          this.refreshEntityLoading = false
         }, 1.5 * 1000)
       },
       handleClear(searchKey,searchValue){
