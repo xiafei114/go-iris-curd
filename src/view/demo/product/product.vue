@@ -31,7 +31,7 @@
 
 <script>
   import Tables from '_c/tables'
-  import {Get} from '@/api/data'
+  import {Get,Delete} from '@/api/data'
   import Button from "iview/src/components/button/button";
 
   export default {
@@ -49,19 +49,17 @@
         total: 0,
         columns: [
           {title: '', key: 'handle', type: 'selection', width: 50, align: 'center'},
-          {title: '账号', key: 'username', sortable: true},
-          {title: '名字', key: 'name', sortable: true},
-          {title: '可用', key: 'enable', sortable: true},
-          {title: '性别', key: 'gender', sortable: true},
-          {title: '电话', key: 'phone', editable: true},
-          {title: '邮件', key: 'email', editable: true},
-          {title: '头像', key: 'userface', editable: true},
-          {title: '创建时间', key: 'createTime'},
-          {title: '更新时间', key: 'updateTime'},
+          {title: '编号', key: 'productCode', sortable: true},
+          {title: '品名', key: 'productName', sortable: true},
+          {title: '金额', key: 'price', sortable: true},
+          {title: '数量', key: 'number', sortable: true},
+          {title: '创建时间', key: 'handle'},
+          {title: '更新时间', key: 'handle'},
           {
-            title: 'Handle',
+            title: '操作',
             key: 'handle',
             options: ['delete'],
+            align: 'center',
             button: [
               (h, params, vm) => {
                 return h('Poptip', {
@@ -75,25 +73,24 @@
                       vm.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
                     }
                   }
-                }, [
-                  h('Button', '自定义删除')
-                ])
+                })
               }
             ]
           }
         ],
-        tableData: [
-          // {name: 'Thomas Jackson', email: '1', createTime: 's'},
-          // {name: 'Thomas Jackson2', email: '2', createTime: 's'},
-          // {name: 'Thomas Jackson3', email: '3', createTime: 's'},
-        ]
+        tableData: []
       }
     },
     methods: {
-      handleDelete(params) {
-        console.log(params)
+      handleDelete(params) {  //删除
+        console.log(params.row)
+
+        let url = '/product/' + params.row.id
+        Delete(url).then(resp => {
+          this.total = this.total -1;
+        })
       },
-      addUser() {
+      addUser() { //添加产品
         this.$router.push({
           name: 'add_user_page'
         })
@@ -131,7 +128,7 @@
 
         if (start === undefined) start = 1
         if (size === undefined) size = 10
-        let url = '/admin/users?start=' + start + '&size=' + size + '&depId=' + this.selectDepId
+        let url = '/product?start=' + start + '&size=' + size
 
         if(! (searchValue === undefined)){
           url +=  '&searchKey=' + searchKey + '&searchValue=' + searchValue
