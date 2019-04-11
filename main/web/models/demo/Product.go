@@ -2,18 +2,21 @@ package demo
 
 import (
 	"go-iris-curd/main/web/db"
-	"go-iris-curd/main/web/models"
+	"time"
 
 	"go-iris-curd/main/web/supports"
 )
 
+// 产品信息
 type Product struct {
-	models.Model
-	// Id          int64   `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`
-	ProductCode string  `xorm:"notnull" json:"productCode" form:"productCode"`
-	ProductName string  `xorm:"notnull" json:"productName" form:"productName"`
-	Price       float64 `xorm:"notnull" json:"price" form:"price"`
-	Number      int     `xorm:"notnull" json:"number" form:"number"`
+	ID          int64      `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`
+	ProductCode string     `xorm:"notnull" json:"productCode" form:"productCode"`
+	ProductName string     `xorm:"notnull" json:"productName" form:"productName"`
+	Price       float64    `xorm:"notnull" json:"price" form:"price"`
+	Number      int        `xorm:"notnull" json:"number" form:"number"`
+	CreatedAt   time.Time  `xorm:"notnull" json:"created_At"`
+	UpdatedAt   time.Time  `xorm:"notnull" json:"updated_At"`
+	DeletedAt   *time.Time `xorm:"notnull" json:"deleted_At" sql:"index"`
 }
 
 /**

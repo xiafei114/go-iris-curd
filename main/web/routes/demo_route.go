@@ -74,7 +74,7 @@ func ProductList(ctx iris.Context) {
 
 	ctx.JSON(vo.TableVO{
 		Total: total,
-		Rows:  vo.BuildUserVOList(entityList...),
+		Rows:  entityList,
 	})
 	return
 
