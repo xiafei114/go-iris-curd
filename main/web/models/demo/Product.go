@@ -10,8 +10,8 @@ import (
 // Product 产品信息
 type Product struct {
 	ID          int64      `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`
-	ProductCode string     `xorm:"notnull" json:"productCode" form:"productCode"`
-	ProductName string     `xorm:"notnull" json:"productName" form:"productName"`
+	ProductCode string     `xorm:"notnull" json:"product_Code" form:"product_Code"`
+	ProductName string     `xorm:"notnull" json:"product_Name" form:"product_Name"`
 	Price       float64    `xorm:"notnull" json:"price" form:"price"`
 	Number      int        `xorm:"notnull" json:"number" form:"number"`
 	CreatedAt   time.Time  `xorm:"notnull" json:"created_At"`
