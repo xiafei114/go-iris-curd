@@ -17,6 +17,9 @@ const (
 	OptionFailur      string = "抱歉, 操作失败"
 	ParseParamsFailur string = "解析参数失败"
 
+	DeleteFailur  string = "删除失败"
+	DeleteSuccess string = "删除成功"
+
 	RegisteSuccess     string = "恭喜, 注册用户成功"
 	RegisteFailur      string = "注册失败"
 	LoginSuccess       string = "恭喜, 登录成功"

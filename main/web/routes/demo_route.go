@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"strconv"
-	"strings"
 	"time"
 
 	"github.com/kataras/golog"
@@ -89,33 +87,18 @@ ERR:
 }
 
 // DeleteProducts 删除产品
-func DeleteProducts(ctx iris.Context, uids string) {
-	uidList := strings.Split(uids, ",")
-	if len(uidList) == 0 {
-		ctx.Application().Logger().Error("删除产品错误, 参数不对.")
-		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
-		return
-	}
+func DeleteProducts(ctx iris.Context, ids string) {
+	var (
+		err    error
+		effect int64
+		entity = new(modeDemo.Product)
+	)
+	effect, err = supports.DeleteEntitys(ids, entity)
 
-	dUids := make([]int64, 0)
-	for _, v := range uidList {
-		if v == "" {
-			continue
-		}
-		uid, err := strconv.ParseInt(v, 10, 64)
-		if err != nil {
-			ctx.Application().Logger().Error("删除产品错误, %s", err.Error())
-			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
-			return
-		}
-		dUids = append(dUids, uid)
-	}
-
-	effect, err := modeDemo.DeleteByProducts(dUids)
 	if err != nil {
-		ctx.Application().Logger().Error("删除产品错误, %s", err.Error())
-		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteProductFailur, nil)
-		return
+		ctx.Application().Logger().Error(err.Error())
+		supports.Error(ctx, iris.StatusBadRequest, supports.DeleteFailur, nil)
 	}
-	supports.Ok(ctx, supports.DeleteProductSuccess, effect)
+
+	supports.Ok(ctx, supports.DeleteSuccess, effect)
 }
