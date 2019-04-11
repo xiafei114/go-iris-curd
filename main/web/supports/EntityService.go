@@ -8,7 +8,7 @@ import (
 	"github.com/go-xorm/xorm"
 )
 
-// 抽象出公用GetPagination
+// GetPagination 抽象出公用
 func GetPagination(list interface{}, page *Pagination) (int64, error) {
 	var (
 		e       = db.MasterEngine()

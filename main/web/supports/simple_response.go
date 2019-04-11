@@ -4,8 +4,9 @@ import (
 	"github.com/kataras/iris"
 )
 
+//
 const (
-	// key定义
+	// CODE key定义
 	CODE string = "code"
 	MSG  string = "msg"
 	DATA string = "data"
@@ -39,18 +40,21 @@ const (
 	NotFound                   string = "您请求的url不存在"
 	PermissionsLess            string = "权限不足"
 
-	RoleCreateFailur   string = "创建角色失败"
+	RoleCreateFailur  string = "创建角色失败"
 	RoleCreateSuccess string = "创建角色成功"
 
 	// value define
-
+	// TODO:下面的真正项目时替换
+	DeleteProductSuccess string = "删除产品成功"
+	DeleteProductFailur  string = "删除产品错误"
 )
 
-// 200 define
-func Ok_(ctx iris.Context, msg string) {
+// OkR 200 define
+func OkR(ctx iris.Context, msg string) {
 	Ok(ctx, msg, nil)
 }
 
+// Ok 简单 返回
 func Ok(ctx iris.Context, msg string, data interface{}) {
 	ctx.StatusCode(iris.StatusOK)
 	ctx.JSON(iris.Map{
@@ -60,7 +64,7 @@ func Ok(ctx iris.Context, msg string, data interface{}) {
 	})
 }
 
-// 401 error define
+// Unauthorized 401 error define
 func Unauthorized(ctx iris.Context, msg string, data interface{}) {
 	unauthorized := iris.StatusUnauthorized
 
@@ -72,7 +76,7 @@ func Unauthorized(ctx iris.Context, msg string, data interface{}) {
 	})
 }
 
-// common error define
+// Error common error define
 func Error(ctx iris.Context, status int, msg string, data interface{}) {
 	ctx.StatusCode(status)
 	ctx.JSON(iris.Map{

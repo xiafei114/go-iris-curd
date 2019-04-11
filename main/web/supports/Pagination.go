@@ -6,7 +6,7 @@ import (
 	"github.com/kataras/iris"
 )
 
-// bootstraptable 分页参数
+// Pagination 分页参数
 type Pagination struct {
 	PageNumber int //当前看的是第几页
 	PageSize   int //每页显示多少条数据
@@ -22,9 +22,10 @@ type Pagination struct {
 	StartDate string
 	EndDate   string
 
-	Uid int64 // 公用的特殊参数
+	UID int64 // 公用的特殊参数
 }
 
+// NewPagination 新增page
 func NewPagination(ctx iris.Context) (*Pagination, error) {
 	start, err1 := ctx.URLParamInt("start")
 	size, err2 := ctx.URLParamInt("size")
