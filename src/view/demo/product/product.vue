@@ -96,7 +96,7 @@
       },
       addEntity() { //添加产品
         this.$router.push({
-          name: 'add_Entity_page'
+          name: 'add_product_page'
         })
       },
       modifyEntity() {
