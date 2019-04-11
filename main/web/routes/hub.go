@@ -13,7 +13,7 @@ import (
 	rcover "github.com/kataras/iris/middleware/recover"
 )
 
-// 所有的路由
+// Hub 所有的路由
 func Hub(app *iris.Application) {
 	preSettring(app)
 	var main = corsSetting(app)

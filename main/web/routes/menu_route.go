@@ -8,6 +8,7 @@ import (
 	"github.com/kataras/iris"
 )
 
+// MenuTable 获得菜单列表
 func MenuTable(ctx iris.Context) {
 	var (
 		err      error

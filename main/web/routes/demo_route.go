@@ -13,11 +13,12 @@ import (
 	modeDemo "go-iris-curd/main/web/models/demo"
 )
 
+// DemoHub demo路由
 func DemoHub(party iris.Party) {
 	// demo测试API模块
 	product := party.Party("/product")
 	{
-		product.Post("/", hero.Handler(AddOneProduct))                 // 新增一个
+		product.Post("/", hero.Handler(CreateProduct))                 // 新增一个
 		product.Get("/", hero.Handler(ProductList))                    // 产品列表
 		product.Get("/{pid:long}", hero.Handler(GetOneProduct))        // 获得一个
 		product.Put("/", hero.Handler(UpdateUser))                     // 更新用户
@@ -25,7 +26,8 @@ func DemoHub(party iris.Party) {
 	}
 }
 
-func AddOneProduct(ctx iris.Context) {
+// CreateProduct 增加产品
+func CreateProduct(ctx iris.Context) {
 	product := new(modeDemo.Product)
 	if err := ctx.ReadJSON(product); err != nil {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
@@ -42,6 +44,7 @@ func AddOneProduct(ctx iris.Context) {
 	supports.OkR(ctx, supports.OptionSuccess)
 }
 
+// GetOneProduct 获得一个产品
 func GetOneProduct(ctx iris.Context, pid int64) {
 	product := new(modeDemo.Product)
 	product.ID = pid
@@ -53,7 +56,7 @@ func GetOneProduct(ctx iris.Context, pid int64) {
 	supports.Ok(ctx, supports.OptionSuccess, product)
 }
 
-// 查询
+// ProductList 分页查询
 func ProductList(ctx iris.Context) {
 	var (
 		err        error

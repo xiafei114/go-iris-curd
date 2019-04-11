@@ -46,16 +46,3 @@ func UpdateProductByID(Product *Product) (int64, error) {
 	e := db.MasterEngine()
 	return e.Id(Product.ID).Update(Product)
 }
-
-// DeleteByProducts 删除产品
-func DeleteByProducts(uids []int64) (effect int64, err error) {
-	e := db.MasterEngine()
-
-	u := new(Product)
-	for _, v := range uids {
-		i, err1 := e.Id(v).Delete(u)
-		effect += i
-		err = err1
-	}
-	return
-}

@@ -10,6 +10,7 @@ import (
 	"github.com/kataras/iris/hero"
 )
 
+// HomeHub home 的路由
 func HomeHub(party iris.Party) {
 	home := party.Party("/")
 	home.Get("/", func(ctx iris.Context) { // 首页模块
@@ -18,6 +19,7 @@ func HomeHub(party iris.Party) {
 	home.Get("/sysMenu", hero.Handler(DynamicMenu)) // 获取动态菜单
 }
 
+// DynamicMenu 获得动态菜单
 func DynamicMenu(ctx iris.Context) {
 	var (
 		user         *modeSys.User
