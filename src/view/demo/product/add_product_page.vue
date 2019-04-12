@@ -65,6 +65,7 @@
             let url = '/product';
             Post(url,this.entity).then(resp => {
               this.$Message.success('Success!')
+              this.handleCloseTag()
             })
           } else {
             this.$Message.error('Fail!')
@@ -73,11 +74,11 @@
       },
       handleReset(name) {
         this.$refs[name].resetFields()
-        this.userValidate = {enable: true}
+        this.entity = {enable: true}
       },
       handleCloseTag() {
         this.closeTag({
-          name: 'add_user_page'
+          name: 'add_product_page'
         })
       }
     },
