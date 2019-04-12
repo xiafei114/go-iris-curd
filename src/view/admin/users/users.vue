@@ -45,7 +45,7 @@
 
 <script>
   import Tables from '_c/tables'
-  import {Get} from '@/api/data'
+  import {Get,Delete} from '@/api/data'
   import Button from "iview/src/components/button/button";
 
   export default {
@@ -100,16 +100,23 @@
             ]
           }
         ],
-        tableData: [
-          // {name: 'Thomas Jackson', email: '1', createTime: 's'},
-          // {name: 'Thomas Jackson2', email: '2', createTime: 's'},
-          // {name: 'Thomas Jackson3', email: '3', createTime: 's'},
-        ]
+        tableData: [],
+        selection:[],
+        page: {
+          start: 1,
+          size: 10,
+          searchKey :'',
+          searchValue:''
+        }
       }
     },
     methods: {
       handleDelete(params) {
         console.log(params)
+        let url = '/admin/users/' + params.row.id
+        Delete(url).then(resp => {
+          this.total = this.total -1;
+        })
       },
       selectDep(dep) {
         if (dep instanceof Array && dep.length === 1) {
@@ -126,12 +133,28 @@
         console.log('modifyUser ...')
       },
       deleteUsers() {
+        let vm = this;
+        let newPage = this.page;
+        function callBackOk(){
+          console.log(vm.selection);
+
+          let ids = "";
+          vm.selection.forEach(item =>{
+            ids += item.id+",";
+          });
+
+          let url = '/admin/users/' + ids
+
+          Delete(url).then(resp => {
+            vm.pullUserTable(newPage)
+          })
+        }
         this.$Modal.confirm({
           title: '确认删除选中的用户?',
           // content: '<p>Content of dialog</p><p>Content of dialog</p>',
           closable: true,
           onOk() {
-            alert('删除了用户')
+            callBackOk()
           },
           onCancel() {
           }
@@ -140,12 +163,12 @@
 
       // 监听选择的表格
       selectChange(selection) {
-        (selection instanceof Array && selection.length === 1)
-          ? this.modifyUserDisable = false
-          : this.modifyUserDisable = true;
-        (selection instanceof Array && selection.length > 0)
-          ? this.deleteUsersDisable = false
-          : this.deleteUsersDisable = true
+
+        if(selection instanceof Array){
+          selection.length === 1 ? this.modifyUserDisable = false : this.modifyUserDisable = true;
+          selection.length > 0 ? this.deleteUsersDisable = false : this.deleteUsersDisable = true;
+          this.selection = selection;
+        }
       },
 
       // 拉取部门树
@@ -159,16 +182,18 @@
           this.refreshDepTreeLoading = false
         }, 1 * 1000)
       },
-      pullUserTable({start, size,searchKey,searchValue}) {
+      pullUserTable(page) {
         this.tableData = []
         this.refreshUserLoading = true
 
-        if (start === undefined) start = 1
-        if (size === undefined) size = 10
-        let url = '/admin/users?start=' + start + '&size=' + size + '&depId=' + this.selectDepId
+        this.page = page;
 
-        if(! (searchValue === undefined)){
-          url +=  '&searchKey=' + searchKey + '&searchValue=' + searchValue
+        if (this.page.start === undefined) this.page.start = 1
+        if (this.page.size === undefined) this.page.size = 10
+        let url = '/admin/users?start=' + this.page.start + '&size=' + this.page.size + '&depId=' + this.selectDepId
+
+        if(! (this.page.searchValue === undefined)){
+          url +=  '&searchKey=' + this.page.searchKey + '&searchValue=' + this.page.searchValue
         }
 
         console.log('url=', url)

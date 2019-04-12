@@ -1,22 +1,22 @@
 <template>
 
-  <Form ref="entityValidate" :model="entityValidate" :rules="ruleValidate" label-position="right" :label-width="110">
+  <Form ref="entityValidate" :model="entity" :rules="ruleValidate" label-position="right" :label-width="110">
     <Row :gutter="16">
       <h4>基本信息</h4>
       <FormItem prop="product_Code" label="产品编号：">
-        <Input type="text" v-model="entityValidate.product_Code" placeholder="Enter text" clearable
+        <Input type="text" v-model="entity.product_Code" placeholder="Enter text" clearable
                style="width: auto"/>
       </FormItem>
       <FormItem prop="product_Name" label="产品名称：">
-        <Input type="text" v-model="entityValidate.product_Name" placeholder="Enter text" clearable
+        <Input type="text" v-model="entity.product_Name" placeholder="Enter text" clearable
                style="width: auto"/>
       </FormItem>
       <FormItem prop="price" label="单价：">
-        <Input type="text" v-model="entityValidate.price" number placeholder="Enter text" clearable
+        <Input type="text" v-model="entity.price" number placeholder="Enter text" clearable
                style="width: auto"/>
       </FormItem>
       <FormItem prop="number" label="数量：">
-        <Input type="text" v-model="entityValidate.number" number placeholder="Enter text" clearable
+        <Input type="text" v-model="entity.number" number placeholder="Enter text" clearable
                style="width: auto"/>
       </FormItem>
 
@@ -36,17 +36,20 @@
 
 <script>
   import {mapMutations} from 'vuex'
+  import {Post} from '@/api/data'
 
   export default {
     data() {
       return {
-        entityValidate: {enable: true},
+        entity: {
+          enable: true,
+        },
         ruleValidate: {
           product_Code: [
-            {required: true, trigger: 'blur',max: 20 ,min:5}
+            {required: true, trigger: 'blur',max: 20 ,min:1}
           ],
           product_Name: [
-            {required: true, message: '名称不能为空', trigger: 'blur',max: 50 ,min:5}
+            {required: true, message: '名称不能为空', trigger: 'blur',max: 50 ,min:1}
           ]
         }
       }
@@ -56,10 +59,13 @@
         'closeTag'
       ]),
       handleSubmit(name) {
-        console.log(this.entityValidate)
+        console.log(this.entity)
         this.$refs[name].validate((valid) => {
           if (valid) {
-            this.$Message.success('Success!')
+            let url = '/product';
+            Post(url,this.entity).then(resp => {
+              this.$Message.success('Success!')
+            })
           } else {
             this.$Message.error('Fail!')
           }

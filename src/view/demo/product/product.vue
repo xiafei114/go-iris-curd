@@ -14,7 +14,6 @@
                 searchable
                 search-place="top"
                 v-model="tableData"
-                tableRef="selection"
                 :columns="columns"
                 :total="total"
                 :highlightRow=true
@@ -68,6 +67,7 @@
                   on: {
                     'on-ok': () => {
                       vm.$emit('on-delete', params)
+                      this.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
                     }
                   }
                 })
@@ -91,7 +91,6 @@
         let url = '/product/' + params.row.id
         Delete(url).then(resp => {
           this.total = this.total -1;
-          this.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
         })
       },
       addEntity() { //添加产品
@@ -104,9 +103,9 @@
       },
       deleteEntitys() {
         let vm = this;
+        let newPage = this.page;
         function callBackOk(){
           console.log(vm.selection);
-          console.log(vm.$refs.tables.$refs.selection);
 
           let ids = "";
           vm.selection.forEach(item =>{
@@ -115,7 +114,7 @@
 
           let url = '/product/' + ids
           Delete(url).then(resp => {
-            vm.pullTableList(vm.page)
+            vm.pullTableList(newPage)
           })
         }
         this.$Modal.confirm({
@@ -145,15 +144,15 @@
         this.tableData = []
         this.refreshEntityLoading = true
 
-        if (page.start === undefined) page.start = 1
-        if (page.size === undefined) page.size = 10
-        let url = '/product?start=' + page.start + '&size=' + page.size
-
-        if(! (page.searchValue === undefined)){
-          url +=  '&searchKey=' + page.searchKey + '&searchValue=' + page.searchValue
-        }
-
         this.page = page;
+
+        if (this.page.start === undefined) this.page.start = 1
+        if (this.page.size === undefined) this.page.size = 10
+        let url = '/product?start=' + this.page.start + '&size=' + this.page.size
+
+        if(! (this.page.searchValue === undefined)){
+          url +=  '&searchKey=' + this.page.searchKey + '&searchValue=' + this.page.searchValue
+        }
 
         console.log('url=', url)
         // return
