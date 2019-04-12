@@ -21,7 +21,7 @@ func DemoHub(party iris.Party) {
 		product.Post("/", hero.Handler(CreateProduct))                 // 新增一个
 		product.Get("/", hero.Handler(ProductList))                    // 产品列表
 		product.Get("/{pid:long}", hero.Handler(GetOneProduct))        // 获得一个
-		product.Put("/", hero.Handler(UpdateUser))                     // 更新用户
+		product.Put("/", hero.Handler(UpdateProduct))                  // 更新用户
 		product.Delete("/{uids:string}", hero.Handler(DeleteProducts)) // 删除产品
 	}
 }
@@ -42,6 +42,23 @@ func CreateProduct(ctx iris.Context) {
 		return
 	}
 	supports.OkR(ctx, supports.OptionSuccess)
+}
+
+// UpdateProduct 更新产品
+func UpdateProduct(ctx iris.Context) {
+	product := new(modeDemo.Product)
+	if err := ctx.ReadJSON(&product); err != nil {
+		ctx.Application().Logger().Errorf("更新产品[%s]失败。%s", "", err.Error())
+		supports.Error(ctx, iris.StatusBadRequest, supports.OptionFailur, nil)
+		return
+	}
+	effect, err := modeDemo.UpdateProductByID(product)
+	if err != nil {
+		ctx.Application().Logger().Errorf("更新产品[%s]失败。%s", "", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
+		return
+	}
+	supports.Ok(ctx, supports.OptionSuccess, effect)
 }
 
 // GetOneProduct 获得一个产品
