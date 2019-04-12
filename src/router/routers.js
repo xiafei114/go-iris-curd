@@ -109,13 +109,13 @@ export default [
     },
     children: [
       {
-        path: 'add_product_page',
-        name: 'add_product_page',
+        path: 'product_form_page',
+        name: 'product_form_page',
         meta: {
           icon: 'md-notifications',
           title: '添加产品'
         },
-        component: () => import('@/view/demo/product/add_product_page.vue')
+        component: () => import('@/view/demo/product/product_form_page.vue')
       }
     ]
   },

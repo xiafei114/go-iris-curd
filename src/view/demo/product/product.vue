@@ -95,11 +95,16 @@
       },
       addEntity() { //添加产品
         this.$router.push({
-          name: 'add_product_page'
+          name: 'product_form_page'
         })
       },
       modifyEntity() {
         console.log('modifyEntity ...')
+        console.log(this.selection);
+        if(this.selection.length === 1){
+          this.$router.push({name: 'product_form_page', params: {id: this.selection[0].id}})
+        }
+
       },
       deleteEntitys() {
         let vm = this;

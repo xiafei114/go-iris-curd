@@ -1,6 +1,6 @@
 <template>
 
-  <Form ref="entityValidate" :model="entity" :rules="ruleValidate" label-position="right" :label-width="110">
+  <Form ref="entityForm" :model="entity" :rules="ruleValidate" label-position="right" :label-width="110">
     <Row :gutter="16">
       <h4>基本信息</h4>
       <FormItem prop="product_Code" label="产品编号：">
@@ -24,8 +24,8 @@
 
 
     <FormItem>
-      <Button type="success" icon="md-checkmark" @click="handleSubmit('entityValidate')">保存</Button>
-      <Button type="error" icon="md-return-left" style="margin-left: 8px" @click="handleReset('entityValidate')">重置
+      <Button type="success" icon="md-checkmark" @click="handleSubmit('entityForm')">保存</Button>
+      <Button type="error" icon="md-return-left" style="margin-left: 8px" @click="handleReset('entityForm')">重置
       </Button>
       <Button type="warning" icon="md-close" style="margin-left: 8px" @click="handleCloseTag">关闭</Button>
     </FormItem>
@@ -36,13 +36,17 @@
 
 <script>
   import {mapMutations} from 'vuex'
-  import {Post} from '@/api/data'
+  import {Get,Post,Put} from '@/api/data'
 
   export default {
     data() {
       return {
+        isEdit:false,
         entity: {
-          enable: true,
+          product_Code:'',
+          product_Name:'',
+          price:0,
+          number:0,
         },
         ruleValidate: {
           product_Code: [
@@ -58,33 +62,72 @@
       ...mapMutations([
         'closeTag'
       ]),
+      async getData(){
+        let id = this.$route.params.id;
+        if(id === undefined){
+          return;
+        }
+
+        let url = '/product/' + id
+
+        console.log(url);
+        let resp = await Get(url);
+
+        console.log(resp);
+        this.entity = resp.data.data;
+        this.isEdit = true;
+
+      },
       handleSubmit(name) {
         console.log(this.entity)
         this.$refs[name].validate((valid) => {
           if (valid) {
-            let url = '/product';
-            Post(url,this.entity).then(resp => {
-              this.$Message.success('Success!')
-              this.handleCloseTag()
-            })
+            if(this.isEdit){
+              let url = '/product';
+              Put(url,this.entity).then(resp => {
+                this.$Message.success('Success!')
+                this.handleCloseTag()
+              })
+            }else{
+              let url = '/product';
+              Post(url,this.entity).then(resp => {
+                this.$Message.success('Success!')
+                this.handleCloseTag()
+              })
+            }
           } else {
             this.$Message.error('Fail!')
           }
         })
       },
       handleReset(name) {
-        this.$refs[name].resetFields()
-        this.entity = {enable: true}
+        if(this.isEdit){
+          this.getData();
+        }else{
+          this.$refs[name].resetFields()
+        }
       },
       handleCloseTag() {
-        this.closeTag({
-          name: 'add_product_page'
-        })
+        if(this.isEdit){
+          this.closeTag({
+            name: 'product_form_page',
+            params: {id: this.$route.params.id}
+          })
+        }else{
+          this.closeTag({
+            name: 'product_form_page'
+          })
+        }
+
       }
     },
     watch: {},
     computed: {},
+    created() {
+      this.getData();
+    },
     mounted: function () {
+
     }
   }
 </script>

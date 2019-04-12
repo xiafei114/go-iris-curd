@@ -67,9 +67,12 @@ export default {
       setTagNavListInLocalstorage([...tagList])
     },
     closeTag (state, route) {
+      console.log(state, route)
       let tag = state.tagNavList.filter(item => routeEqual(item, route))
       route = tag[0] ? tag[0] : null
       if (!route) return
+
+      console.log('do close')
       closePage(state, route)
     },
     addTag (state, { route, type = 'unshift' }) {
