@@ -116,7 +116,17 @@ export default [
           title: '添加产品'
         },
         component: () => import('@/view/demo/product/product_form_page.vue')
+      },
+      {
+        path: 'product_cate_form_page',
+        name: 'product_cate_form_page',
+        meta: {
+          icon: 'md-notifications',
+          title: '添加产品类别'
+        },
+        component: () => import('@/view/demo/product_cate/product_cate_form_page.vue')
       }
+
     ]
   },
   {

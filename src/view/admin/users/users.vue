@@ -100,6 +100,8 @@
             ]
           }
         ],
+        entityBaseUrl:'/admin/users',
+        entityFormName:'add_user_page',
         tableData: [],
         selection:[],
         page: {
@@ -113,7 +115,7 @@
     methods: {
       handleDelete(params) {
         console.log(params)
-        let url = '/admin/users/' + params.row.id
+        let url = this.entityBaseUrl+'/' + params.row.id
         Delete(url).then(resp => {
           this.total = this.total -1;
         })
@@ -126,11 +128,15 @@
       },
       addUser() {
         this.$router.push({
-          name: 'add_user_page'
+          name: this.entityFormName
         })
       },
       modifyUser() {
         console.log('modifyUser ...')
+        console.log(this.selection);
+        if(this.selection.length === 1){
+          this.$router.push({name: this.entityFormName, params: {id: this.selection[0].id}})
+        }
       },
       deleteUsers() {
         let vm = this;
@@ -143,11 +149,13 @@
             ids += item.id+",";
           });
 
-          let url = '/admin/users/' + ids
+          let url = vm.entityBaseUrl+ '/del';
+          console.log(url);
 
-          Delete(url).then(resp => {
+          Delete(url,{ids:ids}).then(resp => {
             vm.pullUserTable(newPage)
           })
+
         }
         this.$Modal.confirm({
           title: '确认删除选中的用户?',
@@ -190,7 +198,7 @@
 
         if (this.page.start === undefined) this.page.start = 1
         if (this.page.size === undefined) this.page.size = 10
-        let url = '/admin/users?start=' + this.page.start + '&size=' + this.page.size + '&depId=' + this.selectDepId
+        let url = this.entityBaseUrl+'?start=' + this.page.start + '&size=' + this.page.size + '&depId=' + this.selectDepId
 
         if(! (this.page.searchValue === undefined)){
           url +=  '&searchKey=' + this.page.searchKey + '&searchValue=' + this.page.searchValue

@@ -1,28 +1,15 @@
 <template>
 
   <Form ref="entityForm" :model="entity" :rules="ruleValidate" label-position="right" :label-width="110">
-    <Row :gutter="16">
-      <h4>基本信息</h4>
-      <FormItem prop="product_Code" label="产品编号：">
-        <Input type="text" v-model="entity.product_Code" placeholder="Enter text" clearable
-               style="width: auto"/>
-      </FormItem>
-      <FormItem prop="product_Name" label="产品名称：">
-        <Input type="text" v-model="entity.product_Name" placeholder="Enter text" clearable
-               style="width: auto"/>
-      </FormItem>
-      <FormItem prop="price" label="单价：">
-        <Input type="text" v-model="entity.price" number placeholder="Enter text" clearable
-               style="width: auto"/>
-      </FormItem>
-      <FormItem prop="number" label="数量：">
-        <Input type="text" v-model="entity.number" number placeholder="Enter text" clearable
-               style="width: auto"/>
-      </FormItem>
-
-    </Row>
-
-
+    <h4>基本信息</h4>
+    <FormItem prop="numCode" label="编号：">
+      <Input type="text" v-model="entity.numCode" placeholder="Enter text" clearable
+             style="width: auto"/>
+    </FormItem>
+    <FormItem prop="chnName" label="名称：">
+      <Input type="text" v-model="entity.chnName" placeholder="Enter text" clearable
+             style="width: auto"/>
+    </FormItem>
     <FormItem>
       <Button type="success" icon="md-checkmark" @click="handleSubmit('entityForm')">保存</Button>
       <Button type="error" icon="md-return-left" style="margin-left: 8px" @click="handleReset('entityForm')">重置
@@ -36,26 +23,24 @@
 
 <script>
   import {mapMutations} from 'vuex'
-  import {Get,Post,Put} from '@/api/data'
+  import {Get, Post, Put} from '@/api/data'
 
   export default {
     data() {
       return {
-        entityBaseUrl:'/product',
-        entityFormName:'product_form_page',
-        isEdit:false,
+        entityBaseUrl:'/productCate',
+        entityFormName:'product_cate_form_page',
+        isEdit: false,
         entity: {
-          product_Code:'',
-          product_Name:'',
-          price:0,
-          number:0,
+          numCode: '',
+          chnName: '',
         },
         ruleValidate: {
-          product_Code: [
-            {required: true, trigger: 'blur',max: 20 ,min:1}
+          numCode: [
+            {required: true, trigger: 'blur', max: 20, min: 1}
           ],
-          product_Name: [
-            {required: true, message: '名称不能为空', trigger: 'blur',max: 50 ,min:1}
+          chnName: [
+            {required: true, message: '名称不能为空', trigger: 'blur', max: 50, min: 1}
           ]
         }
       }

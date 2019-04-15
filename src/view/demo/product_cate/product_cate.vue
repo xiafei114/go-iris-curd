@@ -29,7 +29,7 @@
 
 <script>
   import Tables from '_c/tables'
-  import {Get,Delete} from '@/api/data'
+  import {Get,Post,Delete} from '@/api/data'
   import Button from "iview/src/components/button/button";
 
   export default {
@@ -41,20 +41,18 @@
       return {
         modifyEntityDisable: true,
         deleteEntitysDisable: true,
-
         refreshEntityLoading: false,
         total: 0,
         columns: [
           {title: '', key: 'handle', type: 'selection', width: 50, align: 'center'},
-          {title: '编号', key: 'product_Code', sortable: true},
-          {title: '品名', key: 'product_Name', sortable: true},
-          {title: '金额', key: 'price', sortable: true},
-          {title: '数量', key: 'number', sortable: true},
+          {title: '编号', key: 'numCode',width: 100, sortable: true},
+          {title: '名称', key: 'chnName', sortable: true},
           {
             title: '操作',
             key: 'handle',
             options: ['delete'],
             align: 'center',
+            width: 100,
             button: [
               (h, params, vm) => {
                 return h('Poptip', {
@@ -72,8 +70,8 @@
             ]
           }
         ],
-        entityBaseUrl:'/product',
-        entityFormName:'product_form_page',
+        entityBaseUrl:'/productCate',
+        entityFormName:'product_cate_form_page',
         tableData: [],
         selection:[],
         page: {
@@ -108,8 +106,7 @@
         let vm = this;
         let newPage = this.page;
         function callBackOk(){
-          console.log(vm.selection);
-
+          console.log("callBackOk",vm.selection);
           let ids = "";
           vm.selection.forEach(item =>{
             ids += item.id+",";
@@ -117,14 +114,18 @@
 
           // ids = ids.substr(0,ids.length-1);
 
+          // let url = vm.entityBaseUrl;
           let url = vm.entityBaseUrl + '/del';
+          // let url = String(vm.entityBaseUrl + '/'+ids) ;
+
+          console.log(url);
 
           Delete(url,{ids:ids}).then(resp => {
             vm.pullTableList(newPage)
           })
         }
         this.$Modal.confirm({
-          title: '确认删除选中的产品?',
+          title: '确认删除选中的类别?',
           // content: '<p>Content of dialog</p><p>Content of dialog</p>',
           closable: true,
           onOk() {

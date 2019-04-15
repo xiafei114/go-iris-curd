@@ -61,18 +61,10 @@
       </Col>
     </Row>
 
-    <FormItem :style="{padding: '0 400px'}">
-      <Row>
-        <Col span="8">
+    <FormItem>
         <Button type="success" icon="md-checkmark" @click="handleSubmit('userValidate')">保存</Button>
-        </Col>
-        <Col span="8">
-        <Button type="error" icon="md-return-left" @click="handleReset('userValidate')">重置</Button>
-        </Col>
-        <Col span="8">
-        <Button type="warning" icon="md-close" @click="handleCloseTag">关闭</Button>
-        </Col>
-      </Row>
+        <Button type="error" icon="md-return-left" style="margin-left: 8px" @click="handleReset('userValidate')">重置</Button>
+        <Button type="warning" icon="md-close" style="margin-left: 8px" @click="handleCloseTag">关闭</Button>
     </FormItem>
 
   </Form>
@@ -85,6 +77,8 @@
   export default {
     data() {
       return {
+        entityBaseUrl:'/admin/users',
+        entityFormName:'add_user_page',
         genderSelect: [
           {label: '男', 'value': '男'},
           {label: '女', 'value': '女'},
