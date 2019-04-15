@@ -1,9 +1,8 @@
 <template>
 
   <div>
-    <Row :gutter="16">
       <Card>
-        <Button class="tool" type="primary" icon="md-add" @click="addEntity">新增</Button>
+        <Button class="tool" type="primary" icon="md-person-add" @click="addEntity">新增</Button>
         <Button class="tool" type="warning" icon="md-create" @click="modifyEntity" :disabled="modifyEntityDisable">修改
         </Button>
         <Button class="tool" type="error" icon="md-close" @click="deleteEntitys" :disabled="deleteEntitysDisable">删除
@@ -24,7 +23,6 @@
                 @on-selection-change="selectChange"
         />
       </Card>
-    </Row>
   </div>
 
 </template>
@@ -43,8 +41,8 @@
       return {
         modifyEntityDisable: true,
         deleteEntitysDisable: true,
-        refreshEntityLoading: false,
 
+        refreshEntityLoading: false,
         total: 0,
         columns: [
           {title: '', key: 'handle', type: 'selection', width: 50, align: 'center'},
@@ -67,7 +65,6 @@
                   on: {
                     'on-ok': () => {
                       vm.$emit('on-delete', params)
-                      // this.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
                     }
                   }
                 })
@@ -75,7 +72,7 @@
             ]
           }
         ],
-        tableData: [],  // 数据
+        tableData: [],
         selection:[],
         page: {
           start: 1,
@@ -86,14 +83,14 @@
       }
     },
     methods: {
-      handleDelete(params) {  //删除
-        console.log(params.row)
+      handleDelete(params) {
+        console.log(params)
         let url = '/product/' + params.row.id
         Delete(url).then(resp => {
           this.total = this.total -1;
         })
       },
-      addEntity() { //添加产品
+      addEntity() {
         this.$router.push({
           name: 'product_form_page'
         })
@@ -104,7 +101,6 @@
         if(this.selection.length === 1){
           this.$router.push({name: 'product_form_page', params: {id: this.selection[0].id}})
         }
-
       },
       deleteEntitys() {
         let vm = this;
@@ -118,25 +114,26 @@
           });
 
           let url = '/product/' + ids
+
           Delete(url).then(resp => {
             vm.pullTableList(newPage)
           })
         }
         this.$Modal.confirm({
-          title: '确认删除选中的产品?',
-          // content: '<p>Content o用f dialog</p><p>Content of dialog</p>',
+          title: '确认删除选中的用户?',
+          // content: '<p>Content of dialog</p><p>Content of dialog</p>',
           closable: true,
           onOk() {
-            callBackOk();
+            callBackOk()
           },
           onCancel() {
           }
         })
       },
 
-
       // 监听选择的表格
       selectChange(selection) {
+
         if(selection instanceof Array){
           selection.length === 1 ? this.modifyEntityDisable = false : this.modifyEntityDisable = true;
           selection.length > 0 ? this.deleteEntitysDisable = false : this.deleteEntitysDisable = true;
@@ -144,7 +141,6 @@
         }
       },
 
-      //获得内容
       pullTableList(page) {
         this.tableData = []
         this.refreshEntityLoading = true
@@ -153,7 +149,7 @@
 
         if (this.page.start === undefined) this.page.start = 1
         if (this.page.size === undefined) this.page.size = 10
-        let url = '/product?start=' + this.page.start + '&size=' + this.page.size
+        let url = '/product?start=' + this.page.start + '&size=' + this.page.size ;
 
         if(! (this.page.searchValue === undefined)){
           url +=  '&searchKey=' + this.page.searchKey + '&searchValue=' + this.page.searchValue
@@ -169,10 +165,6 @@
         setTimeout(() => {
           this.refreshEntityLoading = false
         }, 1.5 * 1000)
-      },
-      handleClear(searchKey,searchValue){
-        console.log(searchKey);
-        console.log(searchValue);
       },
       pullData() {
         this.pullTableList({})
