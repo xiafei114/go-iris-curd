@@ -23,11 +23,18 @@ module.exports = {
   // sub-path here. For example, if your app is deployed at
   // https://www.foobar.com/my-app/
   // then change this to '/my-app/'
-  publicPath: BASE_URL,
-  // tweak internal webpack configuration.
-  // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-  // 如果你不需要使用eslint，把lintOnSave设为false即可
+  //基本路径
+// 	baseUrl: './',
+  publicPath: BASE_URL,//vue-cli3.3新版本
+  //输出文件目录
+  outputDir: 'dist',
+  // eslint-loader 是否在保存的时候检查
   lintOnSave: false,
+  //放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录。
+  assetsDir: 'static',
+  //以多页模式构建应用程序。
+  pages: undefined,
+
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
