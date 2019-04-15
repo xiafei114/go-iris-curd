@@ -19,16 +19,6 @@ type Product struct {
 	DeletedAt   *time.Time `json:"deleted_At" sql:"index"`
 }
 
-// ProductCategory 产品类别
-type ProductCategory struct {
-	ID        int64      `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`
-	numCode   string     `xorm:"varchar(50)" json:"numCode" form:"numCode"`
-	chnName   string     `xorm:"varchar(200)" json:"chnName" form:"chnName"`
-	CreatedAt time.Time  `json:"created_At"`
-	UpdatedAt time.Time  `json:"updated_At"`
-	DeletedAt *time.Time `json:"deleted_At" sql:"index"`
-}
-
 // GetProductsByIds 根据id获得产品
 func GetProductsByIds(uids []int64, page *supports.Pagination) ([]*Product, int64, error) {
 	e := db.MasterEngine()

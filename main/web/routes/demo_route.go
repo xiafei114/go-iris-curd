@@ -18,20 +18,22 @@ func DemoHub(party iris.Party) {
 	// demo测试API模块
 	product := party.Party("/product")
 	{
-		product.Post("/", hero.Handler(CreateProduct))                 // 新增一个
-		product.Get("/", hero.Handler(ProductList))                    // 产品列表
-		product.Get("/{pid:long}", hero.Handler(GetOneProduct))        // 获得一个
-		product.Put("/", hero.Handler(UpdateProduct))                  // 更新用户
-		product.Delete("/{uids:string}", hero.Handler(DeleteProducts)) // 删除产品
+		product.Post("/", hero.Handler(CreateProduct))                // 新增一个
+		product.Get("/", hero.Handler(ProductList))                   // 产品列表
+		product.Get("/{pid:long}", hero.Handler(GetOneProduct))       // 获得一个
+		product.Put("/", hero.Handler(UpdateProduct))                 // 更新用户
+		product.Delete("/{uids:string}", hero.Handler(DeleteProduct)) // 删除产品
+		product.Delete("/del", hero.Handler(DeleteProducts))          // 批量删除产品
 	}
 
 	productCate := party.Party("/productCate")
 	{
-		productCate.Post("/", hero.Handler(CreateProductCate))                 // 新增一个
-		productCate.Get("/", hero.Handler(ProductCateList))                    // 产品列表
-		productCate.Get("/{pid:long}", hero.Handler(GetOneProductCate))        // 获得一个
-		productCate.Put("/", hero.Handler(UpdateProductCate))                  // 更新用户
-		productCate.Delete("/{uids:string}", hero.Handler(DeleteProductCates)) // 删除产品
+		productCate.Post("/", hero.Handler(CreateProductCate))                // 新增一个
+		productCate.Get("/", hero.Handler(ProductCateList))                   // 产品列表
+		productCate.Get("/{pid:long}", hero.Handler(GetOneProductCate))       // 获得一个
+		productCate.Put("/", hero.Handler(UpdateProductCate))                 // 更新用户
+		productCate.Delete("/{uids:string}", hero.Handler(DeleteProductCate)) // 删除产品
+		productCate.Delete("/del", hero.Handler(DeleteProductCates))          // 批量删除产品
 	}
 }
 
@@ -115,14 +117,39 @@ ERR:
 	return
 }
 
-// DeleteProducts 删除产品
-func DeleteProducts(ctx iris.Context, ids string) {
+// DeleteProduct 删除产品
+func DeleteProduct(ctx iris.Context, ids string) {
 	var (
 		err    error
 		effect int64
 		entity = new(modeDemo.Product)
 	)
 	effect, err = supports.DeleteEntitys(ids, entity)
+
+	if err != nil {
+		ctx.Application().Logger().Error(err.Error())
+		supports.Error(ctx, iris.StatusBadRequest, supports.DeleteFailur, nil)
+	}
+
+	supports.Ok(ctx, supports.DeleteSuccess, effect)
+}
+
+// DeleteProducts 删除产品
+func DeleteProducts(ctx iris.Context) {
+
+	cr := new(vo.CommonRequest)
+
+	if err := ctx.ReadJSON(cr); err != nil {
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+		return
+	}
+
+	var (
+		err    error
+		effect int64
+		entity = new(modeDemo.Product)
+	)
+	effect, err = supports.DeleteEntitys(cr.Ids, entity)
 
 	if err != nil {
 		ctx.Application().Logger().Error(err.Error())
@@ -214,14 +241,41 @@ ERR:
 	return
 }
 
-// DeleteProductCates 删除产品
-func DeleteProductCates(ctx iris.Context, ids string) {
+// DeleteProductCate 删除产品
+func DeleteProductCate(ctx iris.Context, ids string) {
 	var (
 		err    error
 		effect int64
 		entity = new(modeDemo.ProductCategory)
 	)
+	// ids = ctx.URLParam("uids")
 	effect, err = supports.DeleteEntitys(ids, entity)
+
+	if err != nil {
+		ctx.Application().Logger().Error(err.Error())
+		supports.Error(ctx, iris.StatusBadRequest, supports.DeleteFailur, nil)
+	}
+
+	supports.Ok(ctx, supports.DeleteSuccess, effect)
+}
+
+// DeleteProductCates 删除产品
+func DeleteProductCates(ctx iris.Context) {
+
+	cr := new(vo.CommonRequest)
+
+	var (
+		err    error
+		effect int64
+		entity = new(modeDemo.ProductCategory)
+	)
+
+	if err := ctx.ReadJSON(cr); err != nil {
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+		return
+	}
+
+	effect, err = supports.DeleteEntitys(cr.Ids, entity)
 
 	if err != nil {
 		ctx.Application().Logger().Error(err.Error())

@@ -171,7 +171,7 @@ func UpdateUser(ctx iris.Context) {
 	supports.Ok(ctx, supports.OptionSuccess, effect)
 }
 
-// 删除用户
+// DeleteUsers 删除用户
 func DeleteUsers(ctx iris.Context, uids string) {
 	uidList := strings.Split(uids, ",")
 	if len(uidList) == 0 {
