@@ -15,10 +15,11 @@ func AdminHub(party iris.Party) {
 	{
 		// 用户管理
 		users = admin.Party("/users")
-		users.Get("/dep", hero.Handler(UserDepTree))              // 用户列表
-		users.Get("/", hero.Handler(UserTable))                   // 用户列表
-		users.Put("/", hero.Handler(UpdateUser))                  // 更新用户
-		users.Delete("/{uids:string}", hero.Handler(DeleteUsers)) // 删除用户
+		users.Get("/dep", hero.Handler(UserDepTree))             // 用户列表
+		users.Get("/", hero.Handler(UserTable))                  // 用户列表
+		users.Put("/", hero.Handler(UpdateUser))                 // 更新用户
+		users.Delete("/{uids:string}", hero.Handler(DeleteUser)) // 删除用户
+		users.Delete("/del", hero.Handler(DeleteUsers))          // 批量删除用户
 
 		// 部门管理
 		dep = admin.Party("/dep")

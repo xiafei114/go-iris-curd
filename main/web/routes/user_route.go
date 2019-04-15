@@ -171,9 +171,49 @@ func UpdateUser(ctx iris.Context) {
 	supports.Ok(ctx, supports.OptionSuccess, effect)
 }
 
-// DeleteUsers 删除用户
-func DeleteUsers(ctx iris.Context, uids string) {
+// DeleteUser 删除用户
+func DeleteUser(ctx iris.Context, uids string) {
 	uidList := strings.Split(uids, ",")
+	if len(uidList) == 0 {
+		ctx.Application().Logger().Error("删除用户错误, 参数不对.")
+		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
+		return
+	}
+
+	dUids := make([]int64, 0)
+	for _, v := range uidList {
+		if v == "" {
+			continue
+		}
+		uid, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
+			return
+		}
+		dUids = append(dUids, uid)
+	}
+
+	effect, err := modeSys.DeleteByUsers(dUids)
+	if err != nil {
+		ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteUsersFailur, nil)
+		return
+	}
+	supports.Ok(ctx, supports.DeleteUsersSuccess, effect)
+}
+
+// DeleteUsers 删除用户
+func DeleteUsers(ctx iris.Context) {
+
+	cr := new(vo.CommonRequest)
+
+	if err := ctx.ReadJSON(cr); err != nil {
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+		return
+	}
+
+	uidList := strings.Split(cr.Ids, ",")
 	if len(uidList) == 0 {
 		ctx.Application().Logger().Error("删除用户错误, 参数不对.")
 		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
