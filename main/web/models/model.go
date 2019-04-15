@@ -8,7 +8,7 @@ import "time"
 //    }
 type Model struct {
 	ID        int64      `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`
-	CreatedAt time.Time  `xorm:"notnull" json:"created_At"`
-	UpdatedAt time.Time  `xorm:"notnull" json:"updated_At"`
-	DeletedAt *time.Time `xorm:"notnull" json:"deleted_At" sql:"index"`
+	CreatedAt time.Time  `json:"created_At"`
+	UpdatedAt time.Time  `json:"updated_At"`
+	DeletedAt *time.Time `json:"deleted_At" sql:"index"`
 }

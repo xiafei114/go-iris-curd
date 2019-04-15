@@ -58,7 +58,7 @@ func DeleteEntitys(ids string, entityType interface{}) (int64, error) {
 	return effect, nil
 }
 
-// DeleteByEntitys 删除产品
+// DeleteByEntitys 删除实体
 func DeleteByEntitys(ids []int64, entityType interface{}) (effect int64, err error) {
 	e := db.MasterEngine()
 
@@ -68,4 +68,22 @@ func DeleteByEntitys(ids []int64, entityType interface{}) (effect int64, err err
 		err = err1
 	}
 	return
+}
+
+// CreateEntity 新增实体
+func CreateEntity(entity interface{}) (int64, error) {
+	e := db.MasterEngine()
+	return e.Insert(entity)
+}
+
+// UpdateEntityByID 更新单元实体
+func UpdateEntityByID(id interface{}, entity interface{}) (int64, error) {
+	e := db.MasterEngine()
+	return e.Id(id).Update(entity)
+}
+
+// GetOneEntity 获得一个实体
+func GetOneEntity(entity interface{}) (bool, error) {
+	e := db.MasterEngine()
+	return e.Get(entity)
 }

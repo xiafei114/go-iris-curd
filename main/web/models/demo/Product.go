@@ -19,16 +19,14 @@ type Product struct {
 	DeletedAt   *time.Time `json:"deleted_At" sql:"index"`
 }
 
-// GetOneProduct 获得一个产品
-func GetOneProduct(product *Product) (bool, error) {
-	e := db.MasterEngine()
-	return e.Get(product)
-}
-
-// CreateProduct 新增产品
-func CreateProduct(Product *Product) (int64, error) {
-	e := db.MasterEngine()
-	return e.Insert(Product)
+// ProductCategory 产品类别
+type ProductCategory struct {
+	ID        int64      `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`
+	numCode   string     `xorm:"varchar(50)" json:"numCode" form:"numCode"`
+	chnName   string     `xorm:"varchar(200)" json:"chnName" form:"chnName"`
+	CreatedAt time.Time  `json:"created_At"`
+	UpdatedAt time.Time  `json:"updated_At"`
+	DeletedAt *time.Time `json:"deleted_At" sql:"index"`
 }
 
 // GetProductsByIds 根据id获得产品
@@ -39,10 +37,4 @@ func GetProductsByIds(uids []int64, page *supports.Pagination) ([]*Product, int6
 	s := e.In("id", uids).Limit(page.Limit, page.Start)
 	count, err := s.FindAndCount(&Products)
 	return Products, count, err
-}
-
-// UpdateProductByID 更新单元产品
-func UpdateProductByID(Product *Product) (int64, error) {
-	e := db.MasterEngine()
-	return e.Id(Product.ID).Update(Product)
 }

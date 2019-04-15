@@ -24,6 +24,15 @@ func DemoHub(party iris.Party) {
 		product.Put("/", hero.Handler(UpdateProduct))                  // 更新用户
 		product.Delete("/{uids:string}", hero.Handler(DeleteProducts)) // 删除产品
 	}
+
+	productCate := party.Party("/productCate")
+	{
+		productCate.Post("/", hero.Handler(CreateProductCate))                 // 新增一个
+		productCate.Get("/", hero.Handler(ProductCateList))                    // 产品列表
+		productCate.Get("/{pid:long}", hero.Handler(GetOneProductCate))        // 获得一个
+		productCate.Put("/", hero.Handler(UpdateProductCate))                  // 更新用户
+		productCate.Delete("/{uids:string}", hero.Handler(DeleteProductCates)) // 删除产品
+	}
 }
 
 // CreateProduct 增加产品
@@ -36,7 +45,7 @@ func CreateProduct(ctx iris.Context) {
 
 	golog.Info(product)
 	product.CreatedAt = time.Now()
-	_, err := modeDemo.CreateProduct(product)
+	_, err := supports.CreateEntity(product)
 	if err != nil {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
 		return
@@ -52,7 +61,7 @@ func UpdateProduct(ctx iris.Context) {
 		supports.Error(ctx, iris.StatusBadRequest, supports.OptionFailur, nil)
 		return
 	}
-	effect, err := modeDemo.UpdateProductByID(product)
+	effect, err := supports.UpdateEntityByID(product.ID, product)
 	if err != nil {
 		ctx.Application().Logger().Errorf("更新产品[%s]失败。%s", "", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
@@ -65,7 +74,7 @@ func UpdateProduct(ctx iris.Context) {
 func GetOneProduct(ctx iris.Context, pid int64) {
 	product := new(modeDemo.Product)
 	product.ID = pid
-	_, err := modeDemo.GetOneProduct(product)
+	_, err := supports.GetOneEntity(product)
 	if err != nil {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
 		return
@@ -112,6 +121,105 @@ func DeleteProducts(ctx iris.Context, ids string) {
 		err    error
 		effect int64
 		entity = new(modeDemo.Product)
+	)
+	effect, err = supports.DeleteEntitys(ids, entity)
+
+	if err != nil {
+		ctx.Application().Logger().Error(err.Error())
+		supports.Error(ctx, iris.StatusBadRequest, supports.DeleteFailur, nil)
+	}
+
+	supports.Ok(ctx, supports.DeleteSuccess, effect)
+}
+
+// -------
+
+// CreateProductCate 增加产品
+func CreateProductCate(ctx iris.Context) {
+	entity := new(modeDemo.ProductCategory)
+	if err := ctx.ReadJSON(entity); err != nil {
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+		return
+	}
+
+	golog.Info(entity)
+	entity.CreatedAt = time.Now()
+	_, err := supports.CreateEntity(entity)
+	if err != nil {
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+		return
+	}
+	supports.OkR(ctx, supports.OptionSuccess)
+}
+
+// UpdateProductCate 更新产品
+func UpdateProductCate(ctx iris.Context) {
+	entity := new(modeDemo.ProductCategory)
+	if err := ctx.ReadJSON(&entity); err != nil {
+		ctx.Application().Logger().Errorf("更新产品[%s]失败。%s", "", err.Error())
+		supports.Error(ctx, iris.StatusBadRequest, supports.OptionFailur, nil)
+		return
+	}
+	effect, err := supports.UpdateEntityByID(entity.ID, entity)
+	if err != nil {
+		ctx.Application().Logger().Errorf("更新产品[%s]失败。%s", "", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
+		return
+	}
+	supports.Ok(ctx, supports.OptionSuccess, effect)
+}
+
+// GetOneProduct 获得一个产品
+func GetOneProductCate(ctx iris.Context, pid int64) {
+	entity := new(modeDemo.ProductCategory)
+	entity.ID = pid
+	_, err := supports.GetOneEntity(entity)
+	if err != nil {
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+		return
+	}
+	supports.Ok(ctx, supports.OptionSuccess, entity)
+}
+
+// ProductCateList 分页查询
+func ProductCateList(ctx iris.Context) {
+	var (
+		err        error
+		page       *supports.Pagination
+		total      int64
+		entityList = make([]*modeDemo.ProductCategory, 0)
+	)
+
+	page, err = supports.NewPagination(ctx)
+	if err != nil {
+		goto FAIL
+	}
+
+	total, err = supports.GetPagination(&entityList, page)
+	if err != nil {
+		goto ERR
+	}
+
+	ctx.JSON(vo.TableVO{
+		Total: total,
+		Rows:  entityList,
+	})
+	return
+
+FAIL:
+	supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
+	return
+ERR:
+	supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
+	return
+}
+
+// DeleteProductCates 删除产品
+func DeleteProductCates(ctx iris.Context, ids string) {
+	var (
+		err    error
+		effect int64
+		entity = new(modeDemo.ProductCategory)
 	)
 	effect, err = supports.DeleteEntitys(ids, entity)
 
