@@ -13,6 +13,7 @@ import (
 	"github.com/kataras/iris"
 )
 
+// RoleTable 角色分页
 func RoleTable(ctx iris.Context) {
 	page, err := supports.NewPagination(ctx)
 	if err != nil {
@@ -34,7 +35,7 @@ func RoleTable(ctx iris.Context) {
 	})
 }
 
-// 创建角色
+// CreateRole 创建角色
 func CreateRole(ctx iris.Context) {
 	//rule := new(supports.RoleDefine)
 	rule := new(modeSys.CasbinRule)
@@ -50,6 +51,7 @@ func CreateRole(ctx iris.Context) {
 	supports.OkR(ctx, supports.RoleCreateSuccess)
 }
 
+// UpdateRole 更新角色
 func UpdateRole(ctx iris.Context) {
 	role := new(modeSys.CasbinRule)
 	if err := ctx.ReadJSON(&role); err != nil {
@@ -67,6 +69,7 @@ func UpdateRole(ctx iris.Context) {
 	supports.Ok(ctx, supports.OptionSuccess, effect)
 }
 
+// DeleteRole 删除角色
 func DeleteRole(ctx iris.Context, rids string) {
 	//groupDef := new(supports.GroupDefine)
 	//if err := ctx.ReadJSON(groupDef); err != nil {
@@ -90,7 +93,7 @@ func DeleteRole(ctx iris.Context, rids string) {
 
 	ridList := strings.Split(rids, ",")
 	if len(ridList) == 0 {
-		ctx.Application().Logger().Error("删除角色错误, 参数不对.")
+		ctx.Application().Logger().Errorf("删除角色错误, 参数不对.")
 		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
 		return
 	}
@@ -102,7 +105,7 @@ func DeleteRole(ctx iris.Context, rids string) {
 		}
 		uid, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
-			ctx.Application().Logger().Error("删除角色错误, %s", err.Error())
+			ctx.Application().Logger().Errorf("删除角色错误, %s", err.Error())
 			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
 			return
 		}
@@ -111,14 +114,14 @@ func DeleteRole(ctx iris.Context, rids string) {
 
 	effect, err := modeSys.DeleteByRoles(dRids)
 	if err != nil {
-		ctx.Application().Logger().Error("删除角色错误, %s", err.Error())
+		ctx.Application().Logger().Errorf("删除角色错误, %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteRolesFailur, nil)
 		return
 	}
 	supports.Ok(ctx, supports.DeleteRolesSuccess, effect)
 }
 
-// 给用户指定角色
+// RelationUserRole 给用户指定角色
 func RelationUserRole(ctx iris.Context) {
 	groupDef := new(supports.GroupDefine)
 	if err := ctx.ReadJSON(groupDef); err != nil {
@@ -144,6 +147,7 @@ func RelationUserRole(ctx iris.Context) {
 	supports.OkR(ctx, supports.OptionSuccess)
 }
 
+// RoleUserTable  角色用户查询
 func RoleUserTable(ctx iris.Context, rKey string) {
 	page, err := supports.NewPagination(ctx)
 	if err != nil {
@@ -158,7 +162,7 @@ func RoleUserTable(ctx iris.Context, rKey string) {
 	for _, v := range users {
 		id, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
-			ctx.Application().Logger().Error("获取角色关联的用户表错误, %s", err.Error())
+			ctx.Application().Logger().Errorf("获取角色关联的用户表错误, %s", err.Error())
 			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
 			return
 		}
@@ -167,7 +171,7 @@ func RoleUserTable(ctx iris.Context, rKey string) {
 
 	userList, total, err := modeSys.GetUsersByUids(uids, page)
 	if err != nil {
-		ctx.Application().Logger().Error("获取角色关联的用户表错误, %s", err.Error())
+		ctx.Application().Logger().Errorf("获取角色关联的用户表错误, %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
 		return
 	}
@@ -178,6 +182,7 @@ func RoleUserTable(ctx iris.Context, rKey string) {
 	})
 }
 
+// RoleMenuTable 角色菜单查询
 func RoleMenuTable(ctx iris.Context, rid int64) {
 	page, err := supports.NewPagination(ctx)
 	if err != nil {

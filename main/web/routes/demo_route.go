@@ -127,7 +127,7 @@ func DeleteProduct(ctx iris.Context, ids string) {
 	effect, err = supports.DeleteEntitys(ids, entity)
 
 	if err != nil {
-		ctx.Application().Logger().Error(err.Error())
+		ctx.Application().Logger().Errorf(err.Error())
 		supports.Error(ctx, iris.StatusBadRequest, supports.DeleteFailur, nil)
 	}
 
@@ -152,7 +152,7 @@ func DeleteProducts(ctx iris.Context) {
 	effect, err = supports.DeleteEntitys(cr.Ids, entity)
 
 	if err != nil {
-		ctx.Application().Logger().Error(err.Error())
+		ctx.Application().Logger().Errorf(err.Error())
 		supports.Error(ctx, iris.StatusBadRequest, supports.DeleteFailur, nil)
 	}
 
@@ -196,7 +196,7 @@ func UpdateProductCate(ctx iris.Context) {
 	supports.Ok(ctx, supports.OptionSuccess, effect)
 }
 
-// GetOneProduct 获得一个产品
+// GetOneProductCate 获得一个产品类别
 func GetOneProductCate(ctx iris.Context, pid int64) {
 	entity := new(modeDemo.ProductCategory)
 	entity.ID = pid
@@ -252,7 +252,7 @@ func DeleteProductCate(ctx iris.Context, ids string) {
 	effect, err = supports.DeleteEntitys(ids, entity)
 
 	if err != nil {
-		ctx.Application().Logger().Error(err.Error())
+		ctx.Application().Logger().Errorf(err.Error())
 		supports.Error(ctx, iris.StatusBadRequest, supports.DeleteFailur, nil)
 	}
 
@@ -278,7 +278,7 @@ func DeleteProductCates(ctx iris.Context) {
 	effect, err = supports.DeleteEntitys(cr.Ids, entity)
 
 	if err != nil {
-		ctx.Application().Logger().Error(err.Error())
+		ctx.Application().Logger().Errorf(err.Error())
 		supports.Error(ctx, iris.StatusBadRequest, supports.DeleteFailur, nil)
 	}
 

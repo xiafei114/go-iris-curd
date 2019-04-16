@@ -9,6 +9,7 @@ import (
 	"github.com/kataras/iris"
 )
 
+// DepList 部门树
 func DepList(ctx iris.Context) {
 	var (
 		err  error
@@ -24,6 +25,7 @@ func DepList(ctx iris.Context) {
 	return
 }
 
+// DepTable 部门分页
 func DepTable(ctx iris.Context) {
 	var (
 		err  error
@@ -39,11 +41,12 @@ func DepTable(ctx iris.Context) {
 	return
 }
 
+// CreateDep 新建部门
 func CreateDep(ctx iris.Context) {
 	var (
 		err    error
 		dep    = new(modeSys.Dep)
-		effect int64
+		effect int64 //影响条数
 	)
 	if err = ctx.ReadJSON(&dep); err != nil {
 		goto FAIL
@@ -63,6 +66,7 @@ FAIL:
 	return
 }
 
+// DeleteDep 删除部门
 func DeleteDep(ctx iris.Context, did int64) {
 	var (
 		err    error
@@ -82,6 +86,7 @@ FAIL:
 	return
 }
 
+// RefreshDep 更新部门
 func RefreshDep(ctx iris.Context) {
 	var (
 		err    error

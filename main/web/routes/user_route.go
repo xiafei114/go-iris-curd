@@ -15,6 +15,7 @@ import (
 	"github.com/kataras/iris/hero"
 )
 
+// UserHub 用户路由
 func UserHub(party iris.Party) {
 	var user = party.Party("/user")
 	//p.Use(middleware.BasicAuth)s
@@ -23,6 +24,7 @@ func UserHub(party iris.Party) {
 	user.Post("/logout", hero.Handler(LoginOut))
 }
 
+// Registe 注册
 func Registe(ctx iris.Context) {
 	var (
 		err    error
@@ -53,11 +55,13 @@ FAIL:
 	return
 }
 
+// LoginOut 登出
 func LoginOut(ctx iris.Context) {
 	supports.Ok(ctx, supports.LoginSuccess, nil)
 	return
 }
 
+// Login 登录
 func Login(ctx iris.Context) {
 	var (
 		err        error
@@ -104,6 +108,7 @@ func Login(ctx iris.Context) {
 	return
 }
 
+// UserDepTree 部门树
 func UserDepTree(ctx iris.Context) {
 	var (
 		err  error
@@ -119,7 +124,7 @@ func UserDepTree(ctx iris.Context) {
 	return
 }
 
-// 用户报表
+// UserTable 用户分页查询
 func UserTable(ctx iris.Context) {
 	var (
 		err   error
@@ -155,6 +160,7 @@ ERR:
 	return
 }
 
+// UpdateUser 更新用户
 func UpdateUser(ctx iris.Context) {
 	user := new(modeSys.User)
 	if err := ctx.ReadJSON(&user); err != nil {
@@ -175,7 +181,7 @@ func UpdateUser(ctx iris.Context) {
 func DeleteUser(ctx iris.Context, uids string) {
 	uidList := strings.Split(uids, ",")
 	if len(uidList) == 0 {
-		ctx.Application().Logger().Error("删除用户错误, 参数不对.")
+		ctx.Application().Logger().Errorf("删除用户错误, 参数不对.")
 		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
 		return
 	}
@@ -187,7 +193,7 @@ func DeleteUser(ctx iris.Context, uids string) {
 		}
 		uid, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
-			ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+			ctx.Application().Logger().Errorf("删除用户错误, %s", err.Error())
 			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
 			return
 		}
@@ -196,7 +202,7 @@ func DeleteUser(ctx iris.Context, uids string) {
 
 	effect, err := modeSys.DeleteByUsers(dUids)
 	if err != nil {
-		ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+		ctx.Application().Logger().Errorf("删除用户错误, %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteUsersFailur, nil)
 		return
 	}
@@ -215,7 +221,7 @@ func DeleteUsers(ctx iris.Context) {
 
 	uidList := strings.Split(cr.Ids, ",")
 	if len(uidList) == 0 {
-		ctx.Application().Logger().Error("删除用户错误, 参数不对.")
+		ctx.Application().Logger().Errorf("删除用户错误, 参数不对.")
 		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
 		return
 	}
@@ -227,7 +233,7 @@ func DeleteUsers(ctx iris.Context) {
 		}
 		uid, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
-			ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+			ctx.Application().Logger().Errorf("删除用户错误, %s", err.Error())
 			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
 			return
 		}
@@ -236,7 +242,7 @@ func DeleteUsers(ctx iris.Context) {
 
 	effect, err := modeSys.DeleteByUsers(dUids)
 	if err != nil {
-		ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+		ctx.Application().Logger().Errorf("删除用户错误, %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteUsersFailur, nil)
 		return
 	}
