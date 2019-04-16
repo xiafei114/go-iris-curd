@@ -16,8 +16,8 @@ type Product struct {
 	ProductCateID   int64      `xorm:"INT(10)" json:"product_Cate_Id" form:"product_Cate_Id"`
 	Price           float64    `xorm:"notnull" json:"price" form:"price"`
 	Number          int        `xorm:"notnull" json:"number" form:"number"`
-	CreatedAt       time.Time  `json:"created_At"`
-	UpdatedAt       time.Time  `json:"updated_At"`
+	CreatedAt       time.Time  `xorm:"created" json:"created_At"`
+	UpdatedAt       time.Time  `xorm:"updated" json:"updated_At"`
 	DeletedAt       *time.Time `json:"deleted_At" sql:"index"`
 }
 

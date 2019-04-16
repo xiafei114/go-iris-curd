@@ -46,7 +46,7 @@ func CreateProduct(ctx iris.Context) {
 	}
 
 	golog.Info(product)
-	product.CreatedAt = time.Now()
+	// product.CreatedAt = time.Now()
 	_, err := supports.CreateEntity(product)
 	if err != nil {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
