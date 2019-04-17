@@ -4,7 +4,6 @@ import (
 	modeSys "go-iris-curd/main/web/models/system"
 	"go-iris-curd/main/web/supports"
 	"go-iris-curd/main/web/supports/vo"
-	"time"
 
 	"github.com/kataras/iris"
 )
@@ -52,7 +51,6 @@ func CreateDep(ctx iris.Context) {
 		goto FAIL
 	}
 
-	dep.CreateTime = time.Now()
 	effect, err = modeSys.CreateDep(dep)
 	if effect <= 0 || err != nil {
 		goto FAIL
@@ -73,7 +71,7 @@ func DeleteDep(ctx iris.Context, did int64) {
 		effect int64
 	)
 
-	effect, err = modeSys.DelDepById(did)
+	effect, err = modeSys.DelDepByID(did)
 	if effect <= 0 || err != nil {
 		goto FAIL
 	}
@@ -98,8 +96,7 @@ func RefreshDep(ctx iris.Context) {
 		goto ERR
 	}
 
-	dep.UpdateTime = time.Now()
-	effect, err = modeSys.UpdateDepById(dep)
+	effect, err = modeSys.UpdateDepByID(dep)
 	if err != nil {
 		goto FAIL
 	}

@@ -5,31 +5,29 @@ import (
 	"go-iris-curd/main/web/db"
 	"go-iris-curd/main/web/supports"
 	"strconv"
-	"time"
 
 	"github.com/go-xorm/xorm"
+
+	"go-iris-curd/main/web/models"
 )
 
 /** gov doc
 http://www.xorm.io/docs/
 */
-
 type (
-	// 菜单表
+	// Menu 菜单表
 	Menu struct {
-		Id         int64     `xorm:"pk autoincr INT(10) notnull" json:"id"`
-		Path       string    `xorm:"varchar(64) notnull" json:"path"`
-		Modular    string    `xorm:"varchar(64) notnull" json:"modular"`
-		Component  string    `xorm:"varchar(64) notnull" json:"component"`
-		Name       string    `xorm:"varchar(64) notnull" json:"name"`
-		ParentId   int64     `xorm:"INT(10) notnull" json:"parentId"`
-		IsSub      bool      `xorm:"tinyint(1) notnull" json:"isSub"`
-		CreateTime time.Time `json:"createTime"`
-		UpdateTime time.Time `json:"updateTime"`
-		Meta       Meta      `xorm:"json" json:"meta"`
+		models.Model `xorm:"extends"`
+		Path         string `xorm:"varchar(64) notnull" json:"path"`
+		Modular      string `xorm:"varchar(64) notnull" json:"modular"`
+		Component    string `xorm:"varchar(64) notnull" json:"component"`
+		Name         string `xorm:"varchar(64) notnull" json:"name"`
+		ParentID     int64  `xorm:"INT(10) notnull" json:"parentId"`
+		IsSub        bool   `xorm:"tinyint(1) notnull" json:"isSub"`
+		Meta         Meta   `xorm:"json" json:"meta"`
 	}
 
-	// 路由可配项
+	// Meta 路由可配项
 	Meta struct {
 		// 设为true后在左侧菜单不会显示该页面选项
 		HideInMenu bool `json:"hideInMenu"`
@@ -48,7 +46,7 @@ type (
 	}
 )
 
-// 获取用户的菜单列表
+// DynamicMenuTree 获取用户的菜单列表
 func DynamicMenuTree(uid int64) []*Menu {
 	var (
 		err      error
@@ -131,6 +129,7 @@ FROM role_menu rm WHERE rm.rid in
 //	return menus
 //}
 
+// GetPaginationMenus 分页
 func GetPaginationMenus(page *supports.Pagination) ([]*Menu, int64, error) {
 	var (
 		err      error
@@ -147,6 +146,7 @@ func GetPaginationMenus(page *supports.Pagination) ([]*Menu, int64, error) {
 	return menuList, total, err
 }
 
+// GetMenusByRoleid 获得菜单角色
 func GetMenusByRoleid(rid int64, page *supports.Pagination) ([]*Menu, int64, error) {
 	e := db.MasterEngine()
 	sql := fmt.Sprintf(`

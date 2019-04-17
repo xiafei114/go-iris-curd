@@ -70,7 +70,7 @@ func Serve(ctx context.Context) bool {
 	//ctx.Next()
 }
 
-// 解析token的信息为当前用户
+// ParseToken 解析token的信息为当前用户
 func ParseToken(ctx context.Context) (*modeSys.User, bool) {
 	mapClaims := (jwts.Get(ctx).Claims).(jwt.MapClaims)
 
@@ -83,11 +83,21 @@ func ParseToken(ctx context.Context) (*modeSys.User, bool) {
 		return nil, false
 	}
 
-	user := modeSys.User{
-		Id:       int64(id),
-		Username: username,
-	}
-	return &user, true
+	// user := modeSys.User{
+	// 	models.Model{
+	// 		ID: int64(id),
+	// 		CreatedAt:'',
+	// 		UpdatedAt:'',
+	// 		DeletedAt:''
+	// 	},
+	// 	Username: username,
+	// }
+
+	var user = new(modeSys.User)
+	user.Model.ID = int64(id)
+	user.Username = username
+
+	return user, true
 }
 
 // below 3 method is get token from url
@@ -283,7 +293,7 @@ func GenerateToken(user *modeSys.User) (string, error) {
 	expireTime := time.Now().Add(time.Duration(parse.O.JWTTimeout) * time.Second)
 
 	claims := Claims{
-		user.Id,
+		user.ID,
 		user.Username,
 		user.Enable,
 		//user.Password,

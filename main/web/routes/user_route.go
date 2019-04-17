@@ -8,7 +8,6 @@ import (
 	"go-iris-curd/main/web/supports/vo"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/kataras/golog"
 	"github.com/kataras/iris"
@@ -39,7 +38,6 @@ func Registe(ctx iris.Context) {
 
 	user.Password = utils.AESEncrypt([]byte(user.Password))
 	user.Enable = true
-	user.CreateTime = time.Now()
 
 	effect, err = modeSys.CreateUser(user)
 	if effect <= 0 || err != nil {
@@ -168,7 +166,7 @@ func UpdateUser(ctx iris.Context) {
 		supports.Error(ctx, iris.StatusBadRequest, supports.OptionFailur, nil)
 		return
 	}
-	effect, err := modeSys.UpdateUserById(user)
+	effect, err := modeSys.UpdateUserByID(user)
 	if err != nil {
 		ctx.Application().Logger().Errorf("更新用户[%s]失败。%s", "", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)

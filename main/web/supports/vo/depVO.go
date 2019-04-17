@@ -34,9 +34,9 @@ func BuildDepTree(depList []*modeSys.Dep) *DepTree {
 	)
 
 	for _, v0 = range depList {
-		if v0.ParentId == 0 {
+		if v0.ParentID == 0 {
 			root = &DepTree{ // root根节点
-				Id:       v0.Id,
+				Id:       v0.ID,
 				Title:    v0.DepName,
 				Expand:   true,
 				Disabled: v0.Disabled}
@@ -51,9 +51,9 @@ func BuildDepTree(depList []*modeSys.Dep) *DepTree {
 			children2 []*DepTree // 二级部门
 		)
 
-		if v1.ParentId == root.Id { // 找到一级树
+		if v1.ParentID == root.Id { // 找到一级树
 			el1 = &DepTree{
-				Id:       v1.Id,
+				Id:       v1.ID,
 				Title:    v1.DepName,
 				Expand:   true,
 				Disabled: v1.Disabled,
@@ -63,9 +63,9 @@ func BuildDepTree(depList []*modeSys.Dep) *DepTree {
 			}
 
 			for _, v2 = range depList {
-				if v2.ParentId == v1.Id { // 找到二级树
+				if v2.ParentID == v1.ID { // 找到二级树
 					el2 = &DepTree{
-						Id:       v2.Id,
+						Id:       v2.ID,
 						Title:    v2.DepName,
 						Expand:   true,
 						Disabled: true, // 只有二级节点
@@ -93,7 +93,7 @@ func BuildDepTable(depList []*modeSys.Dep) *DepTable {
 	)
 
 	for _, v0 := range depList {
-		if v0.ParentId == 0 {
+		if v0.ParentID == 0 {
 			root = &DepTable{ // root根节点
 				v0,
 				"",
@@ -110,14 +110,14 @@ func BuildDepTable(depList []*modeSys.Dep) *DepTable {
 			children2 []*DepTable // 二级部门
 		)
 
-		if v1.ParentId == root.Id { // 找到一级树
+		if v1.ParentID == root.ID { // 找到一级树
 			el1 = &DepTable{
 				v1,
 				root.DepName,
 				nil,
 			}
 			for _, v2 := range depList {
-				if v2.ParentId == v1.Id { // 找到二级树
+				if v2.ParentID == v1.ID { // 找到二级树
 					el2 = &DepTable{
 						v2,
 						v1.DepName,
@@ -150,9 +150,9 @@ func BuildDepTreeForUser(depList []*modeSys.Dep) *DepTree {
 	)
 
 	for _, v0 = range depList {
-		if v0.ParentId == 0 {
+		if v0.ParentID == 0 {
 			root = &DepTree{ // root根节点
-				Id:       v0.Id,
+				Id:       v0.ID,
 				Title:    v0.DepName,
 				Expand:   true,
 				Disabled: false}
@@ -167,9 +167,9 @@ func BuildDepTreeForUser(depList []*modeSys.Dep) *DepTree {
 			children2 []*DepTree // 二级部门
 		)
 
-		if v1.ParentId == root.Id { // 找到一级树
+		if v1.ParentID == root.Id { // 找到一级树
 			el1 = &DepTree{
-				Id:       v1.Id,
+				Id:       v1.ID,
 				Title:    v1.DepName,
 				Expand:   true,
 				Disabled: false,
@@ -179,9 +179,9 @@ func BuildDepTreeForUser(depList []*modeSys.Dep) *DepTree {
 			}
 
 			for _, v2 = range depList {
-				if v2.ParentId == v1.Id { // 找到二级树
+				if v2.ParentID == v1.ID { // 找到二级树
 					el2 = &DepTree{
-						Id:       v2.Id,
+						Id:       v2.ID,
 						Title:    v2.DepName,
 						Expand:   true,
 						Disabled: false,

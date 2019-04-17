@@ -60,7 +60,7 @@ func UpdateRole(ctx iris.Context) {
 		return
 	}
 
-	effect, err := modeSys.UpdateRoleById(role)
+	effect, err := modeSys.UpdateRoleByID(role)
 	if err != nil {
 		ctx.Application().Logger().Errorf("更新角色[%s]失败。%s", "", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)

@@ -24,7 +24,7 @@ func BuildMenuTree(menuList []*modeSys.Menu) (menuTree []*MenuVO) {
 		)
 
 		for _, sub = range menuList {
-			if menu.Id == sub.ParentId {
+			if menu.ID == sub.ParentID {
 				childs = append(childs, sub) // 子菜单
 			}
 		}

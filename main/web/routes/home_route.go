@@ -46,6 +46,6 @@ func DynamicMenu(ctx iris.Context) {
 		return
 	}
 
-	menuList = modeSys.DynamicMenuTree(user.Id)
+	menuList = modeSys.DynamicMenuTree(user.ID)
 	supports.Ok(ctx, supports.OptionSuccess, vo.BuildMenuTree(menuList))
 }

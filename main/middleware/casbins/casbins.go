@@ -111,7 +111,7 @@ func CheckPermissions(ctx context.Context) bool {
 		return false
 	}
 
-	uid := strconv.Itoa(int(user.Id))
+	uid := strconv.Itoa(int(user.ID))
 	yes := GetEnforcer().Enforce(uid, "a", ctx.Path(), ctx.Method(), ".*")
 	if !yes {
 		supports.Unauthorized(ctx, supports.PermissionsLess, nil)
