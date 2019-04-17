@@ -11,7 +11,7 @@
  Target Server Version : 100214
  File Encoding         : 65001
 
- Date: 16/04/2019 11:05:47
+ Date: 17/04/2019 16:00:22
 */
 
 SET NAMES utf8mb4;
@@ -141,7 +141,7 @@ CREATE TABLE `menu`  (
   `update_time` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `key`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 51 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menu
@@ -196,6 +196,7 @@ INSERT INTO `menu` VALUES (47, 'query', 'query', '/argu-page', '/query', '{\"ico
 INSERT INTO `menu` VALUES (48, '401', 'error_401', '/error-page', '/401', '{\"hideInBread\":true}', 1, 0, NULL, NULL);
 INSERT INTO `menu` VALUES (49, '500', 'error_500', '/error-page', '/500', '{\"hideInBread\":true}', 1, 0, NULL, NULL);
 INSERT INTO `menu` VALUES (50, '*', 'error_404', '/error-page', '/404', '{\"hideInBread\":true}', 1, 0, NULL, NULL);
+INSERT INTO `menu` VALUES (51, 'operation_mgr', 'operation_mgr', '/admin/operation', '/operation', '{\"title\":\"系统操作\", \"icon\":\"ios-settings\"}', 2, 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for post
@@ -226,13 +227,15 @@ CREATE TABLE `product`  (
   `updated_At` datetime(0) NULL DEFAULT NULL,
   `deleted_At` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product
 -- ----------------------------
 INSERT INTO `product` VALUES (1, 'PD-001', 'asc1', NULL, NULL, 2, 2, '2019-01-08 10:30:33', '2019-01-08 10:30:33', NULL);
 INSERT INTO `product` VALUES (20, 'aaaaaa', 'bbb', NULL, NULL, 222, 333, '2019-04-15 09:56:47', NULL, NULL);
+INSERT INTO `product` VALUES (23, 'test', 'test', '3', 26, 111, 222, '2019-04-16 11:50:08', NULL, NULL);
+INSERT INTO `product` VALUES (24, '哈哈哈哈哈哈', '111111', '', 0, 222, 222, '2019-04-17 10:12:36', '2019-04-17 10:12:36', NULL);
 
 -- ----------------------------
 -- Table structure for product_category
@@ -246,7 +249,7 @@ CREATE TABLE `product_category`  (
   `updated_At` datetime(0) NULL DEFAULT NULL,
   `deleted_At` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_category
@@ -254,6 +257,7 @@ CREATE TABLE `product_category`  (
 INSERT INTO `product_category` VALUES (21, '1', 'aaa', '2019-04-15 10:44:37', NULL, NULL);
 INSERT INTO `product_category` VALUES (25, '2', '3', '2019-04-15 12:19:41', NULL, NULL);
 INSERT INTO `product_category` VALUES (26, '3', '3', '2019-04-15 12:19:54', NULL, NULL);
+INSERT INTO `product_category` VALUES (27, 'aaa', 'bbbaaa', '2019-04-16 11:59:23', '2019-04-16 11:59:45', NULL);
 
 -- ----------------------------
 -- Table structure for role_menu
@@ -264,7 +268,7 @@ CREATE TABLE `role_menu`  (
   `rid` int(10) NOT NULL COMMENT '角色id',
   `mid` int(10) NOT NULL COMMENT '菜单id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 41 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role_menu
@@ -290,6 +294,7 @@ INSERT INTO `role_menu` VALUES (18, 73, 28);
 INSERT INTO `role_menu` VALUES (19, 69, 7);
 INSERT INTO `role_menu` VALUES (20, 69, 8);
 INSERT INTO `role_menu` VALUES (39, 69, 9);
+INSERT INTO `role_menu` VALUES (40, 68, 51);
 
 -- ----------------------------
 -- Table structure for user
