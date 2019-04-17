@@ -1,6 +1,7 @@
 import axios from '@/libs/api.request'
 import Main from '@/components/main'
 
+
 export const getRouterReq = (access) => {
   return axios.request({
     url: 'get_router',
@@ -58,7 +59,9 @@ var initRouterConfig = function (router, store, menus) {
     console.log('@@@@@@@@@@@@@')
   })
   router.addRoutes(router.options.routes) // 调用addRoutes添加路由
+  console.log("do initRouterConfig")
   store.commit('initMenu', fmtRoutes)
+
 }
 // https://router.vuejs.org/zh/api/#router-构建选项
 export const formatRoutes = (routes) => {

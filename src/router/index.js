@@ -20,6 +20,7 @@ const turnTo = (to, access, next) => {
   if (canTurnTo(to.name, access, routes)) { // 有权限，可访问
     console.log('有权限，可访问 ***')
     // 加载动态菜单
+    console.log('加载动态菜单-->2')
     let status = initMenu(router, store)
     console.log('************///////////// init menu, return status=', status)
     // if (status === 200) {

@@ -7,7 +7,8 @@
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
         <DropdownItem name="message">
-          消息中心<Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>
+          消息中心
+          <Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>
         </DropdownItem>
         <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>
@@ -16,44 +17,53 @@
 </template>
 
 <script>
-import './user.less'
-import { mapActions } from 'vuex'
-export default {
-  name: 'User',
-  props: {
-    userAvator: {
-      type: String,
-      default: ''
+  import './user.less'
+  import {mapActions, mapMutations} from 'vuex'
+
+  export default {
+    name: 'User',
+    props: {
+      userAvator: {
+        type: String,
+        default: ''
+      },
+      messageUnreadCount: {
+        type: Number,
+        default: 0
+      }
     },
-    messageUnreadCount: {
-      type: Number,
-      default: 0
-    }
-  },
-  methods: {
-    ...mapActions([
-      'handleLogOut'
-    ]),
-    logout () {
-      this.handleLogOut().then(() => {
-        this.$router.push({
-          name: 'login'
+    created() {
+      this.connection();
+    },
+    methods: {
+      ...mapActions([
+        'handleLogOut'
+      ]),
+      ...mapMutations([
+        'connection'
+      ]),
+      logout() {
+        this.handleLogOut().then(() => {
+          this.$router.push({
+            name: 'login'
+          })
         })
-      })
-    },
-    message () {
-      this.$router.push({
-        name: 'message_page'
-      })
-    },
-    handleClick (name) {
-      switch (name) {
-        case 'logout': this.logout()
-          break
-        case 'message': this.message()
-          break
+      },
+      message() {
+        this.$router.push({
+          name: 'message_page'
+        })
+      },
+      handleClick(name) {
+        switch (name) {
+          case 'logout':
+            this.logout()
+            break
+          case 'message':
+            this.message()
+            break
+        }
       }
     }
   }
-}
 </script>
