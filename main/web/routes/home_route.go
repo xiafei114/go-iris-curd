@@ -17,6 +17,21 @@ func HomeHub(party iris.Party) {
 		ctx.View("index.html")
 	})
 	home.Get("/sysMenu", hero.Handler(DynamicMenu)) // 获取动态菜单
+
+	message := party.Party("/message")
+	message.Get("/count", hero.Handler(MessageCount))
+}
+
+// DefaultHandler 默认访问
+func DefaultHandler(ctx iris.Context) {
+	supports.OkR(ctx, supports.Success)
+	return
+}
+
+// MessageCount 消息条数
+func MessageCount(ctx iris.Context) {
+	supports.Ok(ctx, supports.OptionSuccess, 10)
+	return
 }
 
 // DynamicMenu 获得动态菜单
