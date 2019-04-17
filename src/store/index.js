@@ -10,7 +10,24 @@ Vue.use(Vuex)
 const now = new Date();
 const store = new Vuex.Store({
   state: {
-    //
+    // 会话列表
+    groups: [{
+      group: {
+        id: 'message',
+        name: '我们热爱工作',
+      },
+      messages: [{
+        user: {
+          id: '1',
+          name: 'kwokcc',
+          avatar: 'dist/images/wa.png',
+        },
+        content: '欢迎来到王者荣耀！',
+        date: now
+      }]
+    }
+
+    ],
     //是否登录
     isLogin: false,
     //websocket连接
@@ -20,7 +37,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     //连接websocket
-    connection(state) {
+    connection(state,callback) {
       console.log("do socket")
       state.socket = new Ws('ws://localhost:8088/chat');
 
@@ -29,28 +46,39 @@ const store = new Vuex.Store({
         state.socket.Emit("join", {
           "myRooms": 'message'
         });
-        console.log('加入成功');
+        console.log('socket 加入成功');
       });
 
       //连接丢失
       state.socket.OnDisconnect(function () {
-        alert('连接丢失');
-        console.log('连接丢失');
+        // alert('连接丢失');
+        console.log('socket 连接丢失');
       });
 
       //接收聊天消息
       state.socket.On("chat", function (msg) {
         console.log(msg);
         let message = JSON.parse(msg);
-        console.log(message);
+        console.log("接收到消息:",message);
+
+        let group = state.groups.find(item => item.group.id === 'message');
+        group.messages.push({
+          user: {
+            id: '',
+            name: '',
+            avatar: '',
+          },
+          content: message.content,
+          date: new Date(),
+          self: false
+        });
+        callback();
       });
     },
 
     // 发送消息
     sendMessage({
-                  user,
-                  socket,
-                  action
+                  socket
                 }, content) {
 
       let sender = {
@@ -81,5 +109,13 @@ const store = new Vuex.Store({
   }
 })
 
+store.watch(
+  (state) => state.groups,
+  (val) => {
+    console.log('CHANGE: ', val);
+  }, {
+    deep: true
+  }
+);
 
 export default store;

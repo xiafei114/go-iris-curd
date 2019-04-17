@@ -4,6 +4,7 @@
       <Badge :dot="!!messageUnreadCount">
         <Avatar :src="userAvator"/>
       </Badge>
+
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
         <DropdownItem name="message">
@@ -33,7 +34,10 @@
       }
     },
     created() {
-      this.connection();
+      let vm = this;
+      this.connection(function () {
+        vm.$Message.success('您有新的消息!')
+      });
     },
     methods: {
       ...mapActions([
