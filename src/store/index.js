@@ -4,8 +4,11 @@ import Vuex from 'vuex'
 import user from './module/user'
 import app from './module/app'
 import {Ws} from './iris-ws.js';
+import config from '@/config'
 
 Vue.use(Vuex)
+
+const baseUrl = process.env.NODE_ENV === 'dev' ? config.baseUrl.dev : config.baseUrl.pro
 
 const now = new Date();
 const store = new Vuex.Store({
@@ -39,7 +42,13 @@ const store = new Vuex.Store({
     //连接websocket
     connection(state,callback) {
       console.log("do socket")
-      state.socket = new Ws('ws://localhost:8088/chat');
+      let url = baseUrl.replace('http','ws') + 'chat'
+
+      if(url.length <6){
+        url = 'ws://dev.bjmaxinfo.cn:8088/chat'
+      }
+      console.log(url);
+      state.socket = new Ws(url);
 
       //连接建立
       state.socket.OnConnect(function () {
