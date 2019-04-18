@@ -7,10 +7,10 @@
           <Input type="text" v-model="entity.product_Code" placeholder="Enter text" clearable
                  style="width: auto"/>
         </FormItem>
-        <FormItem prop="product_cate_name" label="产品类别：">
-          <Input type="text" v-model="entity.product_cate_name" placeholder="Enter text" clearable
+        <FormItem prop="product_Cate_Name" label="产品类别：">
+          <Input type="text" v-model="entity.product_Cate_Name" placeholder="Enter text" clearable
                style="width: auto" readonly/>
-          <input type="hidden" v-model="entity.product_cate_id"></input>
+          <input type="hidden" v-model="entity.product_Cate_Id"></input>
           <Button class="tool" type="primary" icon="md-person-add" style="margin-left: 5px" @click="showProductCateModal">选择类别</Button>
         </FormItem>
 
@@ -62,8 +62,8 @@
           product_Name:'',
           price:0,
           number:0,
-          product_cate_name:'',
-          product_cate_id:''
+          product_Cate_Name:'',
+          product_Cate_Id:''
         },
         ruleValidate: {
           product_Code: [
@@ -72,7 +72,7 @@
           product_Name: [
             {required: true, message: '名称不能为空', trigger: 'blur',max: 50 ,min:1}
           ],
-          product_cate_name: [
+          product_Cate_Name: [
             {required: true, message: '名称不能为空', trigger: 'blur',max: 50 ,min:1}
           ]
         }
@@ -144,13 +144,17 @@
         this.$refs.popProductCateList.showPopModal(true)
       },
       handleSelect (cate) {
-        console.log(cate);
-        this.entity.product_cate_name = cate.chnName
-        this.entity.product_cate_id = cate.id
+        console.log(cate.chnName,cate.id);
+        this.entity.product_Cate_Name = cate.chnName;
+        this.entity.product_Cate_Id = cate.id;
         this.$refs.popProductCateList.showPopModal(false)
       },
     },
-    watch: {},
+    watch: {
+      entity: {
+        deep: true
+      }
+    },
     computed: {},
     created() {
       this.getData();

@@ -2,12 +2,12 @@
 
   <div>
     <Card>
-      <Button class="tool" type="primary" icon="md-person-add" @click="addMenu">新增</Button>
-      <Button class="tool" type="warning" icon="md-create" @click="modifyMenu" :disabled="modifyMenuDisable">修改
+      <Button class="tool" type="primary" icon="md-person-add" @click="addEntity">新增</Button>
+      <Button class="tool" type="warning" icon="md-create" @click="modifyEntity" :disabled="modifyEntityDisable">修改
       </Button>
-      <Button class="tool" type="error" icon="md-close" @click="deleteMenus" :disabled="deleteMenusDisable">删除
+      <Button class="tool" type="error" icon="md-close" @click="deleteEntitys" :disabled="deleteEntitysDisable">删除
       </Button>
-      <Button class="tool" type="dashed" icon="ios-refresh" :loading="refreshMenuLoading" @click="pullMenuTable">刷新
+      <Button class="tool" type="dashed" icon="ios-refresh" :loading="refreshEntityLoading" @click="pullTableList">刷新
       </Button>
       <tables ref="tables"
               searchable
@@ -16,27 +16,32 @@
               :columns="columns"
               :total="total"
               :highlightRow=true
-              @change-page="pullMenuTable"
+              @change-page="pullTableList"
+              @change-size="pullTableList"
+              @handle-Search="pullTableList"
               @on-delete="handleDelete"
               @on-selection-change="selectChange"
       />
     </Card>
   </div>
+
 </template>
 
 <script>
   import Tables from '_c/tables'
-  import {Get} from '@/api/data'
+  import {Get,Post,Delete} from '@/api/data'
+  import Button from "iview/src/components/button/button";
 
   export default {
     components: {
+      Button,
       Tables,
     },
     data() {
       return {
-        modifyMenuDisable: true,
-        deleteMenusDisable: true,
-
+        modifyEntityDisable: true,
+        deleteEntitysDisable: true,
+        refreshEntityLoading: false,
         total: 0,
         columns: [
           {title: '', key: 'handle', type: 'selection', width: 50, align: 'center'},
@@ -49,81 +54,139 @@
           {title: '元信息', key: 'meta', width: 400},
           {title: '创建时间', key: 'createTime'},
           {title: '更新时间', key: 'updateTime'},
-          // {
-          //   title: 'Handle',
-          //   key: 'handle',
-          //   options: ['delete'],
-          //   button: [
-          //     (h, params, vm) => {
-          //       return h('Poptip', {
-          //         props: {
-          //           confirm: true,
-          //           title: '你确定要删除吗?'
-          //         },
-          //         on: {
-          //           'on-ok': () => {
-          //             vm.$emit('on-delete', params)
-          //             vm.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
-          //           }
-          //         }
-          //       }, [
-          //         h('Button', '自定义删除')
-          //       ])
-          //     }
-          //   ]
-          // }
+          {
+            title: '操作',
+            key: 'handle',
+            options: ['delete'],
+            align: 'center',
+            width: 100,
+            button: [
+              (h, params, vm) => {
+                return h('Poptip', {
+                  props: {
+                    confirm: true,
+                    title: '你确定要删除吗?'
+                  },
+                  on: {
+                    'on-ok': () => {
+                      vm.$emit('on-delete', params)
+                    }
+                  }
+                })
+              }
+            ]
+          }
         ],
+        entityBaseUrl:'/admin/menu',
+        entityFormName:'product_cate_form_page',
         tableData: [],
-
-        refreshMenuLoading: false
+        selection:[],
+        page: {
+          start: 1,
+          size: 10,
+          searchKey :'',
+          searchValue:''
+        }
       }
     },
     methods: {
-      addMenu() {
+      handleDelete(params) {
+        console.log(params)
+        let url = this.entityBaseUrl + '/' + params.row.id
+        Delete(url).then(resp => {
+          this.total = this.total -1;
+        })
       },
-      modifyMenu() {
+      addEntity() {
+        this.$router.push({
+          name: this.entityFormName
+        })
       },
-      deleteMenus() {
+      modifyEntity() {
+        console.log('modifyEntity ...')
+        console.log(this.selection);
+        if(this.selection.length === 1){
+          this.$router.push({name: this.entityFormName, params: {id: this.selection[0].id}})
+        }
       },
-      handleDelete() {
+      deleteEntitys() {
+        let vm = this;
+        let newPage = this.page;
+        function callBackOk(){
+          console.log("callBackOk",vm.selection);
+          let ids = "";
+          vm.selection.forEach(item =>{
+            ids += item.id+",";
+          });
+
+          // ids = ids.substr(0,ids.length-1);
+
+          // let url = vm.entityBaseUrl;
+          let url = vm.entityBaseUrl + '/del';
+          // let url = String(vm.entityBaseUrl + '/'+ids) ;
+
+          console.log(url);
+
+          Delete(url,{ids:ids}).then(resp => {
+            vm.pullTableList(newPage)
+          })
+        }
+        this.$Modal.confirm({
+          title: '确认删除选中的类别?',
+          // content: '<p>Content of dialog</p><p>Content of dialog</p>',
+          closable: true,
+          onOk() {
+            callBackOk()
+          },
+          onCancel() {
+          }
+        })
       },
 
-      pullMenuTable({start, size}) {
+      // 监听选择的表格
+      selectChange(selection) {
+
+        if(selection instanceof Array){
+          selection.length === 1 ? this.modifyEntityDisable = false : this.modifyEntityDisable = true;
+          selection.length > 0 ? this.deleteEntitysDisable = false : this.deleteEntitysDisable = true;
+          this.selection = selection;
+        }
+      },
+
+      pullTableList(page) {
         this.tableData = []
-        this.refreshMenuLoading = true
+        this.refreshEntityLoading = true
 
-        if (start === undefined) start = 1
-        if (size === undefined) size = 10
-        let url = '/admin/menu?start=' + start + '&size=' + size
-        console.log('menu table url=', url)
+        this.page = page;
+
+        if (this.page.start === undefined) this.page.start = 1
+        if (this.page.size === undefined) this.page.size = 10
+        let url = this.entityBaseUrl + '?start=' + this.page.start + '&size=' + this.page.size ;
+
+        if(! (this.page.searchValue === undefined)){
+          url +=  '&searchKey=' + this.page.searchKey + '&searchValue=' + this.page.searchValue
+        }
+
+        console.log('url=', url)
         // return
         Get(url).then(resp => {
           this.total = resp.data.total
-          resp.data.rows.forEach(d => {
-            d.meta = JSON.stringify(d.meta)
-            d.isSub = JSON.stringify(d.isSub)
-            this.tableData.push(d)
-          })
-          // this.tableData = resp.data.rows
+          // resp.data.rows.forEach(d => this.tableData.push(d))
+          this.tableData = resp.data.rows
         })
         setTimeout(() => {
-          this.refreshMenuLoading = false
+          this.refreshEntityLoading = false
         }, 1.5 * 1000)
       },
-      selectChange(selection) {
-        (selection instanceof Array && selection.length === 1)
-          ? this.modifyMenuDisable = false
-          : this.modifyMenuDisable = true;
-        (selection instanceof Array && selection.length > 0)
-          ? this.deleteMenusDisable = false
-          : this.deleteMenusDisable = true
-      },
+      pullData() {
+        this.pullTableList({})
+      }
     },
+    computed: {},
     mounted() {
-      this.pullMenuTable({})
-    },
+      this.pullData()
+    }
   }
-
 </script>
 <style scoped>
   .tool {
