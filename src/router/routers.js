@@ -96,7 +96,18 @@ export default [
           title: '添加部门'
         },
         component: () => import('@/view/admin/dep/add_dep_page.vue')
-      }
+      },
+      {
+        path: 'menu_form_page',
+        name: 'menu_form_page',
+        meta: {
+          icon: 'md-notifications',
+          title: '添加菜单'
+        },
+        component: () => import('@/view/admin/menus/menu_form_page.vue')
+      },
+
+
     ]
   },
   {

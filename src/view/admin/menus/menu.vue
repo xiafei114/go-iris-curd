@@ -78,7 +78,7 @@
           }
         ],
         entityBaseUrl:'/admin/menu',
-        entityFormName:'product_cate_form_page',
+        entityFormName:'menu_form_page',
         tableData: [],
         selection:[],
         page: {
