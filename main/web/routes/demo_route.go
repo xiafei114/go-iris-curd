@@ -18,7 +18,7 @@ func DemoHub(party iris.Party) {
 		product.Post("/", hero.Handler(CreateProduct))                // 新增一个
 		product.Get("/", hero.Handler(ProductList))                   // 产品列表
 		product.Get("/{pid:long}", hero.Handler(GetOneProduct))       // 获得一个
-		product.Put("/", hero.Handler(UpdateProduct))                 // 更新用户
+		product.Put("/", hero.Handler(UpdateProduct))                 // 更新类别
 		product.Delete("/{uids:string}", hero.Handler(DeleteProduct)) // 删除产品
 		product.Delete("/del", hero.Handler(DeleteProducts))          // 批量删除产品
 	}
@@ -28,7 +28,7 @@ func DemoHub(party iris.Party) {
 		productCate.Post("/", hero.Handler(CreateProductCate))                // 新增一个
 		productCate.Get("/", hero.Handler(ProductCateList))                   // 产品列表
 		productCate.Get("/{pid:long}", hero.Handler(GetOneProductCate))       // 获得一个
-		productCate.Put("/", hero.Handler(UpdateProductCate))                 // 更新用户
+		productCate.Put("/", hero.Handler(UpdateProductCate))                 // 更新类别
 		productCate.Delete("/{uids:string}", hero.Handler(DeleteProductCate)) // 删除产品
 		productCate.Delete("/del", hero.Handler(DeleteProductCates))          // 批量删除产品
 	}

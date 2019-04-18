@@ -12,7 +12,7 @@ import (
 
 // DoCreateEntity 通用保存方法
 func DoCreateEntity(ctx iris.Context, entity interface{}) (int64, int, error) {
-	if err := ctx.ReadJSON(entity); err != nil {
+	if err := ctx.ReadJSON(&entity); err != nil {
 		return 0, iris.StatusBadRequest, fmt.Errorf("实体创建失败。%s", err.Error())
 	}
 
