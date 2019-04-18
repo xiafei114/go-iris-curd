@@ -60,7 +60,7 @@ SELECT * FROM menu WHERE id in
 SELECT rm.mid
 FROM role_menu rm WHERE rm.rid in
 	(
-		SELECT id FROM casbin_rule 
+		SELECT i_d FROM casbin_rule 
 		WHERE 
 		v2 <> 'ANY' AND 
 		v0 in 

@@ -3,18 +3,20 @@ package system
 import (
 	"go-iris-curd/main/web/db"
 	"go-iris-curd/main/web/supports"
+
+	"go-iris-curd/main/web/models"
 )
 
 // CasbinRule 权限
 type CasbinRule struct {
-	ID    int64  `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`
-	PType string `xorm:"varchar(100) index" json:"p_type"`
-	V0    string `xorm:"varchar(100) index" json:"v0"`
-	V1    string `xorm:"varchar(100) index" json:"v1"`
-	V2    string `xorm:"varchar(100) index" json:"v2"`
-	V3    string `xorm:"varchar(100) index" json:"v3"`
-	V4    string `xorm:"varchar(100) index" json:"v4"`
-	V5    string `xorm:"varchar(100) index" json:"v5"`
+	models.Model `xorm:"extends"`
+	PType        string `xorm:"varchar(100) index" json:"p_type"`
+	V0           string `xorm:"varchar(100) index" json:"v0"`
+	V1           string `xorm:"varchar(100) index" json:"v1"`
+	V2           string `xorm:"varchar(100) index" json:"v2"`
+	V3           string `xorm:"varchar(100) index" json:"v3"`
+	V4           string `xorm:"varchar(100) index" json:"v4"`
+	V5           string `xorm:"varchar(100) index" json:"v5"`
 }
 
 // GetPaginationRoles 角色分页

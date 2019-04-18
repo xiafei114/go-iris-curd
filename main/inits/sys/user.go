@@ -36,6 +36,7 @@ func CheckRootExit() bool {
 	return exit
 }
 
+// CreateRoot 建立root用户
 func CreateRoot() {
 	newRoot := modeSys.User{
 		Username: username,
