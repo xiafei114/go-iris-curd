@@ -45,10 +45,12 @@
           <DatePicker type="date" style="width: 200px" v-model="entity.startDate" @on-change="onChangeDate" format="yyyy-MM-dd" placeholder="选择日期以及时间"></DatePicker>
 
         </FormItem>
-        <FormItem prop="isValid" label="数量：">
+        <FormItem prop="isValid" label="">
           <Checkbox v-model="entity.isValid" style="width: auto">是否可用</Checkbox>
         </FormItem>
-
+        <FormItem prop="content" label="">
+          <editor ref="editor" v-model="entity.content" :cache="false"/>
+        </FormItem>
 
 
 
@@ -69,6 +71,7 @@
 
 <script>
   import {mapMutations} from 'vuex'
+  import Editor from '_c/editor'
   import {Get,Post,Put} from '@/api/data'
 
   import PopProductCateListModals from '../../common/pop_product_cate_list_modals'
@@ -76,6 +79,7 @@
   export default {
     components: {
       PopProductCateListModals,
+      Editor,
     },
     data() {
       return {
@@ -93,6 +97,7 @@
           productCateId:'',
           isValid:true,
           startDate:'',
+          content:'',
         },
         ruleValidate: {
           productCode: [
@@ -131,7 +136,8 @@
             value: 'C',
             label: 'C'
           }
-        ]
+        ],
+        contentCache:false
       }
     },
     methods: {
@@ -153,6 +159,7 @@
         this.entity = resp.data.data;
         this.isEdit = true;
 
+        this.$refs.editor.setHtml(this.entity.content)
       },
       handleSubmit(name) {
         console.log(this.entity)
@@ -209,7 +216,7 @@
         this.$refs.popProductCateList.showPopModal(false)
       },
       onChangeDate(date){
-      },
+      }
 
     },
     watch: {
@@ -219,10 +226,10 @@
     },
     computed: {},
     created() {
-      this.getData();
+
     },
     mounted: function () {
-
+      this.getData();
     }
   }
 </script>

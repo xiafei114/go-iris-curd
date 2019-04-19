@@ -99,18 +99,19 @@ export default {
   },
   actions: {
     addErrorLog ({ commit, rootState }, info) {
-      if (!window.location.href.includes('error_logger_page')) commit('setHasReadErrorLoggerStatus', false)
-      const { user: { token, userId, userName } } = rootState
-      let data = {
-        ...info,
-        time: Date.parse(new Date()),
-        token,
-        userId,
-        userName
-      }
-      saveErrorLogger(info).then(() => {
-        commit('addError', data)
-      })
+      // TODO: 暂时注释掉错误日志功能
+      // if (!window.location.href.includes('error_logger_page')) commit('setHasReadErrorLoggerStatus', false)
+      // const { user: { token, userId, userName } } = rootState
+      // let data = {
+      //   ...info,
+      //   time: Date.parse(new Date()),
+      //   token,
+      //   userId,
+      //   userName
+      // }
+      // saveErrorLogger(info).then(() => {
+      //   commit('addError', data)
+      // })
     }
   }
 }
