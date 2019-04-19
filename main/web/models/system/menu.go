@@ -6,7 +6,7 @@ import (
 	"go-iris-curd/main/web/supports"
 	"strconv"
 
-	"github.com/go-xorm/xorm"
+	"github.com/xormplus/xorm"
 
 	"go-iris-curd/main/web/models"
 )

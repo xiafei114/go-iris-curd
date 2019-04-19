@@ -5,7 +5,7 @@ import (
 
 	"go-iris-curd/main/web/db"
 
-	"github.com/go-xorm/xorm"
+	"github.com/xormplus/xorm"
 )
 
 // GetPagination 抽象出公用

@@ -6,11 +6,11 @@ import (
 	"go-iris-curd/main/utils"
 	"sync"
 
-	"github.com/go-xorm/core"
 	"github.com/kataras/golog"
+	"github.com/xormplus/core"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/go-xorm/xorm"
+	"github.com/xormplus/xorm"
 )
 
 var (
