@@ -46,8 +46,8 @@
         total: 0,
         columns: [
           {title: '', key: 'handle', type: 'selection', width: 50, align: 'center'},
-          {title: '编号', key: 'product_Code', sortable: true},
-          {title: '品名', key: 'product_Name', sortable: true},
+          {title: '编号', key: 'productCode', sortable: true},
+          {title: '品名', key: 'productName', sortable: true},
           {title: '金额', key: 'price', sortable: true},
           {title: '数量', key: 'number', sortable: true},
           {

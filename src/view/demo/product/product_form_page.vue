@@ -3,21 +3,36 @@
     <Form ref="entityForm" :model="entity" :rules="ruleValidate" label-position="right" :label-width="110">
       <Row :gutter="16">
         <h4>基本信息</h4>
-        <FormItem prop="product_Code" label="产品编号：">
-          <Input type="text" v-model="entity.product_Code" placeholder="Enter text" clearable
+        <FormItem prop="productCode" label="产品编号：">
+          <Input type="text" v-model="entity.productCode" placeholder="Enter text" clearable
                  style="width: auto"/>
         </FormItem>
-        <FormItem prop="product_Cate_Name" label="产品类别：">
-          <Input type="text" v-model="entity.product_Cate_Name" placeholder="Enter text" clearable
+        <FormItem prop="productCateName" label="产品类别：">
+          <Input type="text" v-model="entity.productCateName" placeholder="Enter text" clearable
                style="width: auto" readonly/>
-          <input type="hidden" v-model="entity.product_Cate_Id"></input>
+          <input type="hidden" v-model="entity.productCateId"></input>
           <Button class="tool" type="primary" icon="md-person-add" style="margin-left: 5px" @click="showProductCateModal">选择类别</Button>
         </FormItem>
 
-        <FormItem prop="product_Name" label="产品名称：">
-          <Input type="text" v-model="entity.product_Name" placeholder="Enter text" clearable
+        <FormItem prop="productName" label="产品名称：">
+          <Input type="text" v-model="entity.productName" placeholder="Enter text" clearable
                  style="width: auto"/>
         </FormItem>
+
+        <FormItem prop="productType" label="产品类型：">
+          <Select v-model="entity.productType" style="width:200px">
+            <Option v-for="item in productTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </FormItem>
+
+        <FormItem prop="productColor" label="产品颜色：">
+          <RadioGroup v-model="entity.productColor">
+            <Radio label="红"></Radio>
+            <Radio label="黄"></Radio>
+            <Radio label="蓝"></Radio>
+          </RadioGroup>
+        </FormItem>
+
         <FormItem prop="price" label="单价：">
           <Input type="text" v-model="entity.price" number placeholder="Enter text" clearable
                  style="width: auto"/>
@@ -26,6 +41,16 @@
           <Input type="text" v-model="entity.number" number placeholder="Enter text" clearable
                  style="width: auto"/>
         </FormItem>
+        <FormItem prop="startDate" label="开始时间：">
+          <DatePicker type="date" style="width: 200px" v-model="entity.startDate" @on-change="onChangeDate" format="yyyy-MM-dd" placeholder="选择日期以及时间"></DatePicker>
+
+        </FormItem>
+        <FormItem prop="isValid" label="数量：">
+          <Checkbox v-model="entity.isValid" style="width: auto">是否可用</Checkbox>
+        </FormItem>
+
+
+
 
       </Row>
 
@@ -58,24 +83,55 @@
         entityFormName:'product_form_page',
         isEdit:false,
         entity: {
-          product_Code:'',
-          product_Name:'',
+          productCode:'',
+          productName:'',
+          productType:'',
+          productColor:'',
           price:0,
           number:0,
-          product_Cate_Name:'',
-          product_Cate_Id:''
+          productCateName:'',
+          productCateId:'',
+          isValid:true,
+          startDate:'',
         },
         ruleValidate: {
-          product_Code: [
+          productCode: [
             {required: true, trigger: 'blur',max: 20 ,min:1}
           ],
-          product_Name: [
+          productName: [
             {required: true, message: '名称不能为空', trigger: 'blur',max: 50 ,min:1}
           ],
-          product_Cate_Name: [
-            {required: true, message: '名称不能为空', trigger: 'blur',max: 50 ,min:1}
-          ]
-        }
+          productCateName: [
+            {required: true, message: '类别不能为空', trigger: 'blur',max: 50 ,min:1}
+          ],
+          productType: [
+            {required: true, message: '类型不能为空', trigger: 'blur'}
+          ],
+          productColor: [
+            {required: true, message: '颜色需要选择', trigger: 'blur'}
+          ],
+          startDate: [
+            {
+              type:"date",
+              required: true, message: '开始时间需要选择', trigger: 'blur'}
+          ],
+
+
+        },
+        productTypeList: [
+          {
+            value: 'A',
+            label: 'A'
+          },
+          {
+            value: 'B',
+            label: 'B'
+          },
+          {
+            value: 'C',
+            label: 'C'
+          }
+        ]
       }
     },
     methods: {
@@ -102,15 +158,18 @@
         console.log(this.entity)
         this.$refs[name].validate((valid) => {
           if (valid) {
+            this.$Loading.start();
             if (this.isEdit) {
               let url = this.entityBaseUrl;
               Put(url, this.entity).then(resp => {
+                this.$Loading.finish();
                 this.$Message.success('Success!')
                 this.handleCloseTag()
               })
             } else {
               let url = this.entityBaseUrl
               Post(url, this.entity).then(resp => {
+                this.$Loading.finish();
                 this.$Message.success('Success!')
                 this.handleCloseTag()
               })
@@ -145,10 +204,13 @@
       },
       handleSelect (cate) {
         console.log(cate.chnName,cate.id);
-        this.entity.product_Cate_Name = cate.chnName;
-        this.entity.product_Cate_Id = cate.id;
+        this.entity.productCateName = cate.chnName;
+        this.entity.productCateId = cate.id;
         this.$refs.popProductCateList.showPopModal(false)
       },
+      onChangeDate(date){
+      },
+
     },
     watch: {
       entity: {
