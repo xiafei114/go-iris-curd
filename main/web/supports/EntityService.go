@@ -54,6 +54,12 @@ func UpdateEntityByID(id interface{}, entity interface{}) (int64, error) {
 	return e.Id(id).Update(entity)
 }
 
+// UpdateEntityByColums 更新单元实体
+func UpdateEntityByColums(id interface{}, entity interface{}, columns ...string) (int64, error) {
+	e := db.MasterEngine()
+	return e.Id(id).Cols(columns...).Update(entity)
+}
+
 // GetOneEntity 获得一个实体
 func GetOneEntity(entity interface{}) (bool, error) {
 	e := db.MasterEngine()

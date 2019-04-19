@@ -19,7 +19,7 @@ var (
 	lock         sync.Mutex
 )
 
-// 主库，单例
+// MasterEngine 主库，单例
 func MasterEngine() *xorm.Engine {
 	if masterEngine != nil {
 		return masterEngine
@@ -45,7 +45,7 @@ func MasterEngine() *xorm.Engine {
 	return masterEngine
 }
 
-// 从库，单例
+// SlaveEngine 从库，单例
 func SlaveEngine() *xorm.Engine {
 	if slaveEngine != nil {
 		return slaveEngine
@@ -70,7 +70,7 @@ func SlaveEngine() *xorm.Engine {
 	return engine
 }
 
-//
+// settings 设置
 func settings(engine *xorm.Engine, info *parse.DBConfigInfo) {
 	engine.ShowSQL(info.ShowSql)
 	engine.SetTZLocation(utils.SysTimeLocation)
@@ -86,7 +86,7 @@ func settings(engine *xorm.Engine, info *parse.DBConfigInfo) {
 	//engine.SetDefaultCacher(cacher)
 }
 
-// 获取数据库连接的url
+// GetConnURL 获取数据库连接的url
 // true：master主库
 func GetConnURL(info *parse.DBConfigInfo) (url string) {
 	//db, err := gorm.Open("mysql", "user:password@/dbname?charset=utf8&parseTime=True&loc=Local")

@@ -26,10 +26,8 @@ func DoCreateEntity(ctx iris.Context, entity interface{}) (int64, int, error) {
 	return effect, 0, nil
 }
 
-/*
-	DoUpdateEntity 更新单元实体
-	TODO:存在错误，不能更新，明明已经有id了，可生成的update语句id=0
-*/
+// DoUpdateEntity 更新单元实体
+// TODO:存在错误，不能更新，明明已经有id了，可生成的update语句id=0
 func DoUpdateEntity(ctx iris.Context, id interface{}, entity interface{}) (int64, int, error) {
 	if err := ctx.ReadJSON(&entity); err != nil {
 		return 0, iris.StatusBadRequest, fmt.Errorf("更新实体失败。%s", err.Error())
