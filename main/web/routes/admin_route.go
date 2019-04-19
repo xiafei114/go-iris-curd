@@ -43,6 +43,7 @@ func AdminHub(party iris.Party) {
 		menu.Get("/", hero.Handler(MenuTable))                    // 菜单列表
 		menu.Post("/", hero.Handler(CreateMenu))                  // 创建菜单
 		menu.Put("/", hero.Handler(UpdateMenu))                   // 更新菜单
+		menu.Get("/{pid:long}", hero.Handler(GetOneMenu))       // 获得一个
 		menu.Delete("/{uids:string}", hero.Handler(DeleteMenu))   // 删除菜单
 		menu.Delete("/del", hero.Handler(DeleteMenus))            // 批量删除菜单
 		menu.Post("/permissions", hero.Handler(RelationUserRole)) // 给角色添加权限

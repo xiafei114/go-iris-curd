@@ -34,6 +34,14 @@ func UpdateMenu(ctx iris.Context) {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
 		return
 	}
+
+	effect, err = supports.UpdateEntityByColums(entity.ID, entity, "is_Sub")
+
+	if err != nil {
+		ctx.Application().Logger().Errorf("更新产品[%s]失败。%s", "", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
+		return
+	}
 	supports.Ok(ctx, supports.OptionSuccess, effect)
 }
 
@@ -113,6 +121,18 @@ ERR:
 	supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
 	return
 
+}
+
+// GetOneMenu 获得一个菜单
+func GetOneMenu(ctx iris.Context, pid int64) {
+	entity := new(modeSys.Menu)
+	entity.ID = pid
+	_, err := supports.GetOneEntity(entity)
+	if err != nil {
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+		return
+	}
+	supports.Ok(ctx, supports.OptionSuccess, entity)
 }
 
 // 修改角色权限
