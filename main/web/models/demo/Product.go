@@ -30,7 +30,7 @@ type Product struct {
 	// 是否有效
 	IsValid bool `xorm:"tinyint(1) notnull 'is_Valid'" json:"isValid" form:"isValid"`
 	// 内容（使用富文本保存）
-	Content string `xorm:"mediumtext 'content'"`
+	Content string `xorm:"mediumtext 'content'" json:"content" form:"content"`
 }
 
 // GetProductsByIds 根据id获得产品
