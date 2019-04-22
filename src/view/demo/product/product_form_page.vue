@@ -48,11 +48,13 @@
         <FormItem prop="isValid" label="">
           <Checkbox v-model="entity.isValid" style="width: auto">是否可用</Checkbox>
         </FormItem>
+        <FormItem prop="isValid" label="文件上传">
+          <input id="fileinput" @change="uploading($event)" type="file" accept="*/*">
+        </FormItem>
+
         <FormItem prop="content" label="">
           <editor ref="editor" v-model="entity.content" :cache="false"/>
         </FormItem>
-
-
 
       </Row>
 
@@ -73,6 +75,9 @@
   import {mapMutations} from 'vuex'
   import Editor from '_c/editor'
   import {Get,Post,Put} from '@/api/data'
+  import { getToken } from '@/libs/util'
+
+  import axios from 'axios'
 
   import PopProductCateListModals from '../../common/pop_product_cate_list_modals'
 
@@ -137,7 +142,9 @@
             label: 'C'
           }
         ],
-        contentCache:false
+        //上传单个文件
+        file:'',
+        src:''
       }
     },
     methods: {
@@ -162,29 +169,60 @@
         this.$refs.editor.setHtml(this.entity.content)
       },
       handleSubmit(name) {
-        console.log(this.entity)
+        console.log(this.entity);
+
         this.$refs[name].validate((valid) => {
           if (valid) {
             this.$Loading.start();
-            if (this.isEdit) {
-              let url = this.entityBaseUrl;
-              Put(url, this.entity).then(resp => {
-                this.$Loading.finish();
-                this.$Message.success('Success!')
-                this.handleCloseTag()
-              })
-            } else {
-              let url = this.entityBaseUrl
-              Post(url, this.entity).then(resp => {
-                this.$Loading.finish();
-                this.$Message.success('Success!')
-                this.handleCloseTag()
-              })
+
+            if(this.file !== ''){
+              event.preventDefault();//取消默认行为
+              let formdata = new FormData();
+              console.log(formdata);
+              formdata.append('uploadfile',this.file);
+              //此处必须设置为  multipart/form-data
+
+              let config = {
+                headers: {
+                  'Content-Type': 'multipart/form-data',  //之前说的以表单传数据的格式来传递fromdata
+                  'Authorization': 'bearer ' + getToken()
+                }
+              };
+
+              // console.log(config);
+
+              axios.post('/common/upload', formdata, config).then( (res) => {
+                console.log(res.data.data());;
+                this.updateEntity("1111");
+              }).catch((error) =>{
+
+              });
+
+            }else{
+              this.updateEntity();
             }
+
+
           } else {
             this.$Message.error('Fail!')
           }
         })
+      },
+      updateEntity(commonFileId){ //新建或者更新实体
+        let url = this.entityBaseUrl;
+        if (this.isEdit) {
+          Put(url, this.entity).then(resp => {
+            this.$Loading.finish();
+            this.$Message.success('Success!')
+            this.handleCloseTag()
+          })
+        } else {
+          Post(url, this.entity).then(resp => {
+            this.$Loading.finish();
+            this.$Message.success('Success!')
+            this.handleCloseTag()
+          })
+        }
       },
       handleReset(name) {
         if (this.isEdit) {
@@ -216,6 +254,13 @@
         this.$refs.popProductCateList.showPopModal(false)
       },
       onChangeDate(date){
+      },
+      uploading(event){ // 上传单个文件
+        this.file = event.target.files[0];//获取文件
+        let windowURL = window.URL || window.webkitURL;
+        this.file = event.target.files[0];
+        //创建图片文件的url
+        this.src = windowURL.createObjectURL(event.target.files[0]);
       }
 
     },

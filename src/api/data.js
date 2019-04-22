@@ -24,7 +24,7 @@ export const Put = (url, obj) => {
   })
 }
 
-export const Delete = (url,obj={}) => {
+export const Delete = (url, obj = {}) => {
   return axios.request({
     url: url,
     data: obj,
