@@ -11,7 +11,7 @@
  Target Server Version : 100214
  File Encoding         : 65001
 
- Date: 19/04/2019 11:30:39
+ Date: 22/04/2019 17:15:34
 */
 
 SET NAMES utf8mb4;
@@ -55,6 +55,18 @@ INSERT INTO `casbin_rule` VALUES (71, 'p', 't1', 'a', '/*', 'PUT|DELETE|GET|POST
 INSERT INTO `casbin_rule` VALUES (72, 'p', 'user', 'a', '/*', 'PUT|DELETE|GET|POST', '.*', NULL, NULL, NULL, NULL);
 INSERT INTO `casbin_rule` VALUES (73, 'p', 'components', 'a', '/components*', 'GET|POST|DELETE|PUT', '.*', NULL, NULL, NULL, NULL);
 INSERT INTO `casbin_rule` VALUES (74, 'g', '90', 'components', 'a', '', '', NULL, NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for common_file
+-- ----------------------------
+DROP TABLE IF EXISTS `common_file`;
+CREATE TABLE `common_file`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `content_Type` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `file_Name` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `file_Path` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for demo
@@ -145,7 +157,7 @@ CREATE TABLE `menu`  (
   `deleted_At` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `key`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 54 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menu
@@ -233,19 +245,23 @@ CREATE TABLE `product`  (
   `product_Color` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `is_Valid` tinyint(1) NULL DEFAULT NULL,
   `content` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `common_File_ID` int(10) NULL DEFAULT NULL,
   `created_At` datetime(0) NULL DEFAULT NULL,
   `updated_At` datetime(0) NULL DEFAULT NULL,
   `deleted_At` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `common_File_ID`(`common_File_ID`) USING BTREE,
+  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`common_File_ID`) REFERENCES `common_file` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product
 -- ----------------------------
-INSERT INTO `product` VALUES (1, 'PD-001', 'asc1', NULL, NULL, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2019-01-08 10:30:33', '2019-01-08 10:30:33', NULL);
-INSERT INTO `product` VALUES (20, 'aaaaaa', 'bbb', NULL, NULL, 222, 333, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-15 09:56:47', NULL, NULL);
-INSERT INTO `product` VALUES (23, 'test', 'test', '3', 26, 111, 222, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-16 11:50:08', NULL, NULL);
-INSERT INTO `product` VALUES (24, '哈哈哈哈哈哈', '111111', '1111', 28, 222, 222, NULL, NULL, NULL, NULL, NULL, NULL, '2019-04-17 10:12:36', '2019-04-18 14:27:54', NULL);
+INSERT INTO `product` VALUES (1, 'PD-001', 'asc1', NULL, NULL, 2, 2, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2019-01-08 10:30:33', '2019-01-08 10:30:33', NULL);
+INSERT INTO `product` VALUES (20, 'aaaaaa', 'bbb', '3', 26, 222, 333, '1901-01-01 00:00:00', NULL, 'B', '蓝', 0, '<p>a</p><p>a</p><p>b<br></p>', NULL, '2019-04-15 09:56:47', '2019-04-19 15:03:02', NULL);
+INSERT INTO `product` VALUES (23, 'test', 'test', '3', 26, 111, 222, NULL, NULL, 'A', '红', 0, NULL, NULL, '2019-04-16 11:50:08', '2019-04-19 12:20:31', NULL);
+INSERT INTO `product` VALUES (24, '哈哈哈哈哈哈1', '111111', '1111', 28, 222, 222, '2011-02-01 00:00:00', NULL, 'B', '黄', 1, '<p>2121212121212111112224343</p><p>54545545411111</p><p>445454111111111111111<br></p>', NULL, '2019-04-17 10:12:36', '2019-04-19 15:17:17', NULL);
+INSERT INTO `product` VALUES (25, 'aaaa1aa3456', '22222', '3', 26, 0, 0, '2019-04-04 00:00:00', NULL, 'C', '蓝', 1, '<p>1111<br></p>', NULL, '2019-04-19 15:31:02', '2019-04-22 16:16:19', NULL);
 
 -- ----------------------------
 -- Table structure for product_category
@@ -259,7 +275,7 @@ CREATE TABLE `product_category`  (
   `updated_At` datetime(0) NULL DEFAULT NULL,
   `deleted_At` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_category
@@ -271,8 +287,9 @@ INSERT INTO `product_category` VALUES (27, 'aaa', 'bbbaaa', '2019-04-16 11:59:23
 INSERT INTO `product_category` VALUES (28, 'fdsfd', '1111', '2019-04-17 16:59:48', '2019-04-17 16:59:48', NULL);
 INSERT INTO `product_category` VALUES (29, 'tttt', '1111', '2019-04-17 17:00:01', '2019-04-17 17:00:07', NULL);
 INSERT INTO `product_category` VALUES (30, '1111', '222', '2019-04-18 12:12:44', '2019-04-18 12:12:44', NULL);
-INSERT INTO `product_category` VALUES (31, 'aaaaa1111', 'bbbbbaaa', '2019-04-18 12:13:25', '2019-04-18 14:01:49', NULL);
+INSERT INTO `product_category` VALUES (31, 'aaaaa1111', 'bbbbbaaa啊啊啊', '2019-04-18 12:13:25', '2019-04-19 11:32:41', NULL);
 INSERT INTO `product_category` VALUES (32, 'test', 'rr', '2019-04-18 15:10:46', '2019-04-18 15:10:46', NULL);
+INSERT INTO `product_category` VALUES (33, '444', '555', '2019-04-19 11:32:27', '2019-04-19 11:32:27', NULL);
 
 -- ----------------------------
 -- Table structure for role_menu

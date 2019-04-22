@@ -18,10 +18,13 @@ func Hub(app *iris.Application) {
 	preSettring(app)
 	var main = corsSetting(app)
 
-	HomeHub(main)
-	UserHub(main) // 用户API模块
-	AdminHub(main)
-	DemoHub(main)
+	CommonHub(main) //通用api
+
+	HomeHub(main)  //home 的路由 api
+	UserHub(main)  // 用户API模块
+	AdminHub(main) //管理路由
+	DemoHub(main)  //demo路由，功能比较全
+
 }
 
 func corsSetting(app *iris.Application) (main iris.Party) {

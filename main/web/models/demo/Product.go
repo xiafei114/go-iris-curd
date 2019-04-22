@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"go-iris-curd/main/web/models"
+	"go-iris-curd/main/web/models/common"
 	"go-iris-curd/main/web/supports"
 )
 
@@ -31,6 +32,8 @@ type Product struct {
 	IsValid bool `xorm:"tinyint(1) notnull 'is_Valid'" json:"isValid" form:"isValid"`
 	// 内容（使用富文本保存）
 	Content string `xorm:"mediumtext 'content'" json:"content" form:"content"`
+	//相关文件
+	CommonFileID common.CommonFile `xorm:"INT(10) 'common_File_ID'" json:"commonFileId" form:"commonFileId"`
 }
 
 // GetProductsByIds 根据id获得产品

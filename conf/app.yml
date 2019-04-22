@@ -12,3 +12,4 @@ Other:
   JWTTimeout: 604800 #second  60 * 60 * 24 * 7 = 604800 ，七天免登录
   LogLevel: debug
   Secret: xxx-Secret
+  UploadFile: "D:/workspace_go/src/go-iris-curd/uploads/"

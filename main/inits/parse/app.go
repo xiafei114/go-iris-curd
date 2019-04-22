@@ -21,6 +21,7 @@ var (
 	jwtTimeout string = "JWTTimeout"
 	logLevel   string = "LogLevel"
 	secret     string = "Secret"
+	uploadFile string = "UploadFile"
 )
 
 type (
@@ -30,6 +31,7 @@ type (
 		JWTTimeout int64
 		LogLevel   string
 		Secret     string
+		UploadFile string
 	}
 )
 
@@ -62,5 +64,7 @@ func AppOtherParse() {
 	O.LogLevel = c.GetOther()[logLevel].(string)
 
 	O.Secret = c.GetOther()[secret].(string)
+
+	O.UploadFile = c.GetOther()[uploadFile].(string)
 
 }
