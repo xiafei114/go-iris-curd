@@ -7,9 +7,9 @@ import (
 	conf "go-iris-curd/main/inits/parse"
 	"go-iris-curd/main/web/routes"
 
+	"github.com/kataras/iris"
 	"github.com/tidwall/gjson"
 
-	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
 )
 
@@ -22,6 +22,7 @@ func main() {
 	app.RegisterView(iris.HTML("resources", ".html").Binary(static.Asset, static.AssetNames))
 	staticHandler := iris.StaticEmbeddedHandler("resources", static.Asset, static.AssetNames, false)
 	app.SPA(staticHandler).AddIndexName("index.html")
+
 	//app.StaticEmbedded("/static", "resources", static.Asset, static.AssetNames)
 	//app.Favicon("resources/favicon.ico")
 	//app.StaticWeb("/static", "resources/static")

@@ -23,6 +23,13 @@
     go-bindata -pkg static -o main/inits/bindata/static/static-data.go resources/...
 ```
 
+4. 使用 govendor
+
+```
+    govendor init 初始化，建立vendor.json
+    govendor add +external 抓取文件
+```
+
 #### 使用说明
 
 1. 运行 go run main/main.go
