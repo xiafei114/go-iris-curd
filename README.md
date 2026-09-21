@@ -1,3 +1,5 @@
+
+
 # go-iris-curd
 
 #### 介绍
@@ -34,4 +36,4 @@
 
 1. 运行 go run main/main.go
 2. 打开浏览器 http://localhost:8088
-3. xxxx
+3. 使用 root / 123456 登录
